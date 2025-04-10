@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -88,8 +87,8 @@ export function SkillsSection() {
 
 
   return (
-    <section className="relative py-12 md:py-20 px-4 bg-background min-h-screen flex items-center">
-      <div className="container max-w-7xl mx-auto">
+    <section className="relative py-12 md:py-20 px-4 bg-background">
+      <div className="mx-auto max-w-max">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,7 +97,7 @@ export function SkillsSection() {
           Technical Expertise
         </motion.h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative">
           <CategoryNavigation
             categories={categories}
             activeCategory={activeCategory}
@@ -131,17 +130,17 @@ export function SkillsSection() {
   );
 }
 
-interface CategoryNavigationProps {
+type CategoryNavigationProps = {
   categories: Array<keyof typeof skills>;
   activeCategory: keyof typeof skills;
   scrollToCategory: (category: keyof typeof skills) => void;
   setAutoScrollEnabled: (enabled: boolean) => void;
-}
+};
 
 const CategoryNavigation = ({ categories, activeCategory, scrollToCategory, setAutoScrollEnabled }: CategoryNavigationProps) => (
-  <div className="lg:col-span-4 relative">
-    <div className="sticky top-24 space-y-2">
-      {categories.map((category) => {
+  <div className="lg:col-span-4 lg:sticky lg:top-24 lg:h-[calc(100vh-12rem)] lg:mt-2">
+    <div className="flex flex-row lg:flex-col gap-2 md:gap-1.5 lg:gap-2 pb-3 lg:pb-0 overflow-x-auto lg:overflow-visible scrollbar-hide flex-nowrap">
+      {categories.map((category: keyof typeof skills) => {
         const Icon = categoryIcons[category];
         const isActive = category === activeCategory;
 
@@ -150,7 +149,8 @@ const CategoryNavigation = ({ categories, activeCategory, scrollToCategory, setA
             key={category}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: categories.indexOf(category) * 0.1 }}
+            transition={{ delay: categories.indexOf(category) * 0.05 }}
+            className="flex-shrink-0 lg:flex-shrink lg:w-full px-1 md:px-0.5 lg:px-0" // Added horizontal padding for mobile
           >
             <Button
               variant="ghost"
@@ -159,13 +159,17 @@ const CategoryNavigation = ({ categories, activeCategory, scrollToCategory, setA
                 scrollToCategory(category);
               }}
               className={cn(
-                "w-full justify-start h-14 px-4 text-sm",
-                isActive && `bg-gradient-to-r ${categoryGradients[category]} text-white`
+                "justify-start h-10 lg:h-12 px-3 sm:px-4 py-1.5 sm:py-2 w-full", // Adjusted padding for different screens
+                "text-sm md:text-base lg:text-sm", // Responsive text sizing
+                isActive && `bg-gradient-to-r ${categoryGradients[category]} text-white`,
+                "hover:bg-muted/50" // Added hover state
               )}
             >
-              <Icon className="w-4 h-4 mr-3" />
-              {category.replace(/([A-Z])/g, ' $1').trim()}
-              <span className="ml-auto text-muted-foreground/80">
+              <Icon className="w-5 h-5 mr-2 lg:mr-3" /> {/* Increased icon spacing */}
+              <span className="text-left truncate max-w-[120px] md:max-w-full"> {/* Added max-width for mobile */}
+                {category.replace(/([A-Z])/g, " $1").trim()}
+              </span>
+              <span className="ml-auto text-muted-foreground/80 md:block hidden"> {/* Show count on tablet+ */}
                 {skills[category].length}
               </span>
             </Button>
@@ -191,7 +195,7 @@ const SkillsPanel = ({
 }) => (
   <div
     ref={skillsContainerRef}
-    className="lg:col-span-8 h-[65vh] overflow-y-auto snap-y snap-mandatory scrollbar-hide"
+    className="lg:col-span-8  h-[50vh] lg:h-[calc(100vh-12rem)] overflow-y-auto snap-y snap-mandatory scrollbar-hide"
   >
     {Object.entries(skills).map(([category, items]) => (
       <div
@@ -202,9 +206,9 @@ const SkillsPanel = ({
           }
         }}
         data-category={category}
-        className="h-[65vh] snap-always snap-start pb-6"
+        className="h-[80vh] lg:h-[calc(100vh-12rem)] snap-always snap-start flex items-center"
       >
-        <div className="p-6 rounded-xl bg-muted/10 border backdrop-blur-sm">
+        <div className="w-full p-6 rounded-xl bg-muted/10 border backdrop-blur-sm">
           <div className="mb-6 flex items-center gap-3">
             <div className={`w-8 h-8 rounded-lg ${categoryColors[category as keyof typeof categoryColors]} flex items-center justify-center`}>
               {React.createElement(categoryIcons[category as keyof typeof categoryIcons], { className: "w-4 h-4 text-white" })}
@@ -214,18 +218,18 @@ const SkillsPanel = ({
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 justify-items-center">
             {items.map((skill, index) => (
               <motion.div
                 key={skill}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.05 }}
-                className="relative"
+                className="w-full max-w-[200px] relative"
                 onClick={() => handleSkillClick(skill)}
               >
                 <div className={cn(
-                  "p-3 rounded-lg text-sm cursor-pointer transition-all",
+                  "p-3 rounded-lg text-sm cursor-pointer transition-all text-center relative",
                   "bg-background border hover:border-primary/50",
                   selectedSkill === skill && `${categoryColors[category as keyof typeof categoryColors]} text-white`
                 )}>
@@ -243,11 +247,11 @@ const SkillsPanel = ({
   </div>
 );
 
-interface ProgressIndicatorProps {
+type ProgressIndicatorProps = {
   categories: Array<keyof typeof skills>;
   activeCategory: keyof typeof skills;
   scrollToCategory: (category: keyof typeof skills) => void;
-}
+};
 
 const ProgressIndicator = ({ categories, activeCategory, scrollToCategory }: ProgressIndicatorProps) => (
   <div className="mt-8 flex justify-center">

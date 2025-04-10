@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin, LucideTwitter, Mail, TwitterIcon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import profile from "../public/pfp.jpg";
@@ -62,14 +62,14 @@ export default function Hero() {
                 </motion.p>
 
                 <motion.div
-                    className="flex gap-4"
+                    className="flex gap-4 flex-col md:flex-row"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1 }}
                 >
                     <Button
                         asChild
-                        className="w-fit gap-2 px-6 py-5 text-base backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-lg"
+                        className="w-full gap-2 px-6 py-5 text-base backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-lg"
                         variant="glass"
                     >
                         <Link href="#contact">
@@ -80,7 +80,7 @@ export default function Hero() {
                     <Button
                         asChild
                         variant="glass"
-                        className="w-fit gap-2 px-6 py-5 text-base backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-lg"
+                        className="w-full gap-2 px-6 py-5 text-base backdrop-blur-sm transition-all hover:scale-[1.02] hover:shadow-lg"
                     >
                         <Link href="#projects">
                             See My Mistakes
@@ -102,6 +102,30 @@ export default function Hero() {
                     >
                         <Github className="h-6 w-6" />
                     </Link>
+
+                    <Link
+                        href="https://leetcode.com/satyammjha"
+                        target="_blank"
+                        className="text-foreground/70 transition-all hover:scale-110 hover:text-foreground"
+                    >
+                        <Image
+                            src="/leetcode.svg"
+                            alt="LeetCode"
+                            width={24}
+                            height={24}
+                            className="object-contain opacity-60"
+                            priority
+                        />
+                    </Link>
+
+                    <Link
+                        href="https://x.com/satyammjha"
+                        target="_blank"
+                        className="text-foreground/70 transition-all hover:scale-110 hover:text-foreground"
+                    >
+                        <TwitterIcon className="h-6 w-6" />
+                    </Link>
+
                     <Link
                         href="https://linkedin.com/in/satyammjha"
                         target="_blank"
@@ -110,6 +134,7 @@ export default function Hero() {
                         <Linkedin className="h-6 w-6" />
                     </Link>
                 </motion.div>
+
             </motion.div>
 
             <motion.div
@@ -128,18 +153,17 @@ export default function Hero() {
                             repeatType: "mirror"
                         }}
                     >
-                        <Image
-                            src="/pfp.jpg"
-                            alt="Satyam Jha - Not an AI"
-                            fill
-                            className="object-cover h-full w-full rounded-full z-40"
-                            sizes="(max-width: 768px) 100vw,
-                                (max-width: 1200px) 50vw,
-                                50vw "
-                            priority
-                        />
-
-
+                        <div className="hidden flex-1 md:flex">
+                            <div className="relative aspect-square w-full overflow-hidden rounded-full border-4 border-muted bg-background/10">
+                                <Image
+                                    src={profile}
+                                    alt="Satyam Jha - Not an AI"
+                                    fill
+                                    className="object-cover"
+                                    priority
+                                />
+                            </div>
+                        </div>
                     </motion.div>
                     <div className="absolute inset-0 rounded-full border-2 border-white/10 shadow-[inset_0_1px_30px_rgba(255,255,255,0.3)] dark:shadow-[inset_0_1px_30px_rgba(0,0,0,0.3)]" />
                 </div>

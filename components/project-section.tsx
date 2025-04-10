@@ -30,6 +30,13 @@ const projects = [
         tech: ["React Native", "Firebase", "Push Notifications", "AsyncStorage"],
         image: "/jeevani.jpg",
         repo: "https://github.com/satyammjha/Jeevani---HDIMS",
+    },
+    {
+        title: "CU Auto Login - Chrome Extension",
+        description: "A Chrome Extension that automates the login process for CUCHD’s Academics Manager portal, including auto-filling credentials and bypassing captcha using AI. Built to save time and make daily logins effortless.",
+        tech: ["JavaScript", "Chrome Extension APIs", "Hugging Face", "AI Captcha Solver", "LocalStorage"],
+        image: "/cu-auto-login.jpg",
+        repo: "https://github.com/satyammjha/cu-auto-login-extension",
     }
 ];
 

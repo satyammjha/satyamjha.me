@@ -7,6 +7,9 @@ import { SkillsSection } from '../components/skills';
 import { ChevronDown, ArrowUp } from 'lucide-react';
 import { motion, useScroll, useAnimation, useSpring, useTransform } from 'framer-motion';
 import { ProjectsSection } from '@/components/project-section';
+import { TestimonialsSection } from '@/components/testimonials-section';
+import { Footer } from '@/components/footer';
+import { VoiceRecorderSection } from '@/components/recorder';
 
 export default function IndexPage() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -26,7 +29,7 @@ export default function IndexPage() {
   const secondaryGlowX = useTransform(smoothProgress, [0, 1], ['100%', '30%']);
   const secondaryGlowY = useTransform(smoothProgress, [0, 1], ['0%', '80%']);
 
-  const primaryHue = useTransform(smoothProgress, [0, 0.5, 1], [180, 210, 240]);  
+  const primaryHue = useTransform(smoothProgress, [0, 0.5, 1], [180, 210, 240]);
   const primarySaturation = useTransform(smoothProgress, [0, 1], [80, 60]);
   const primaryLightness = useTransform(smoothProgress, [0, 1], [90, 85]);
 
@@ -73,9 +76,9 @@ export default function IndexPage() {
 
   return (
     <div ref={mainRef} className="min-h-screen bg-background relative overflow-hidden">
- 
+
       <div className="fixed inset-0 -z-50 overflow-hidden">
-       
+
         <motion.div
           className="absolute inset-0"
           style={{
@@ -194,16 +197,7 @@ export default function IndexPage() {
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col justify-between px-4 sm:px-6 lg:px-8 relative z-10">
         <div ref={heroRef} className="min-h-screen flex flex-col justify-center relative">
           <Hero />
-          <motion.div
-            initial={{ opacity: 0.5, y: 0 }}
-            animate={{ opacity: 1, y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            className="absolute bottom-10 left-1/2 transform -translate-x-1/2 cursor-pointer"
-            onClick={() => scrollToSection(aboutRef)}
-          >
-            <ChevronDown size={30} className="text-primary" />
-            <span className="text-sm font-medium text-muted-foreground block text-center mt-1">Scroll Down</span>
-          </motion.div>
+
         </div>
 
         <div ref={aboutRef} className="min-h-screen flex items-center py-16 backdrop-blur-sm">
@@ -215,12 +209,13 @@ export default function IndexPage() {
             <QuoteCard className="transform hover:scale-[1.02] transition-transform duration-300" />
           </div>
         </div>
-
-        <div ref={skillsRef} className="py-16 backdrop-blur-sm">
+        <VoiceRecorderSection />
+        <div ref={skillsRef} className="backdrop-blur-sm">
           <SkillsSection />
         </div>
-
+        <TestimonialsSection />
         <ProjectsSection />
+        <Footer />
       </div>
     </div>
   );
