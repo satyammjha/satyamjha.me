@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useScroll, useTransform, motion, useMotionValueEvent } from 'framer-motion';
 import Image from 'next/image';
 import { User, Linkedin, Globe } from 'lucide-react';
-import { useMediaQuery } from 'usehooks-ts'; 
+import { useMediaQuery } from 'usehooks-ts';
 
 const testimonials = [
     {
@@ -69,7 +69,7 @@ export function TestimonialsSection() {
 
     return (
         <section ref={containerRef} className="relative h-[300vh] bg-gradient-to-b from-background/50 to-muted/20">
-   
+
             <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
                 <div className="max-w-2xl w-full px-4 text-center relative">
                     <motion.h2
@@ -141,9 +141,8 @@ export function TestimonialsSection() {
                             <button
                                 key={i}
                                 onClick={() => setActiveIndex(i)}
-                                className={`h-2.5 w-2.5 rounded-full transition-all ${
-                                    i === activeIndex ? 'bg-primary w-4' : 'bg-gray-400'
-                                }`}
+                                className={`h-2.5 w-2.5 rounded-full transition-all ${i === activeIndex ? 'bg-primary w-4' : 'bg-gray-400'
+                                    }`}
                             />
                         ))}
                     </div>

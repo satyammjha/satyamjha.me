@@ -1,16 +1,38 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Mic, X, Send, RefreshCw, Waves } from "lucide-react";
+import { Mic, X, Send, RefreshCw } from "lucide-react";
 import { useReactMediaRecorder } from "react-media-recorder";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+
+const MAIN_MESSAGES = [
+    "I promise not to listen... much.",
+    "Your voice is my favorite sound... said no one ever.",
+    "Go ahead, I've got all day... not.",
+    "I’m all ears (unfortunately).",
+    "Your voice note is my command... sigh.",
+    "Wow, you’re actually using this?",
+];
+
+const RECORDING_MESSAGES = [
+    "Keep going, I’m barely awake...",
+    "Is this story going somewhere?",
+    "Fascinating... said no one ever.",
+    "I've heard better from parrots.",
+    "Don't stop now... or do.",
+];
 
 export function VoiceRecorderSection() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
+    const [audioLength, setAudioLength] = useState(0);
+    const [waveformData, setWaveformData] = useState<number[]>([]);
+    const [currentMessage, setCurrentMessage] = useState(0);
+    const [currentRecordingMessage, setCurrentRecordingMessage] = useState(0);
+    const [email, setEmail] = useState("");
+    const [emailError, setEmailError] = useState("");
 
     const {
         startRecording,
@@ -23,10 +45,50 @@ export function VoiceRecorderSection() {
         onStop: () => setIsRecording(false),
     });
 
+    const validateEmail = (email: string) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    };
+    const TITLES = [
+        "Voice Jail",
+        "Your Audio Diary (We’re Judging)",
+        "Noise Pollution",
+        "Monologue Maker"
+    ];
+
+    const [currentTitle, setCurrentTitle] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTitle(prev => (prev + 1) % TITLES.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        if (!isModalOpen) {
+            const interval = setInterval(() => {
+                setCurrentMessage(prev => (prev + 1) % MAIN_MESSAGES.length);
+            }, 3000);
+            return () => clearInterval(interval);
+        }
+    }, [isModalOpen]);
+
+    useEffect(() => {
+        if (status === "recording") {
+            const interval = setInterval(() => {
+                setCurrentRecordingMessage(prev => (prev + 1) % RECORDING_MESSAGES.length);
+            }, 4000);
+            return () => clearInterval(interval);
+        }
+    }, [status]);
+
     const handleRecording = () => {
         if (!isRecording) {
             startRecording();
             setIsRecording(true);
+            setAudioLength(0);
+            setWaveformData(Array(100).fill(0).map(() => Math.random() * 0.8 + 0.2));
         } else {
             stopRecording();
         }
@@ -35,154 +97,231 @@ export function VoiceRecorderSection() {
     const handleReset = () => {
         clearBlobUrl();
         setIsRecording(false);
+        setAudioLength(0);
+        setWaveformData([]);
+        setEmail("");
+        setEmailError("");
     };
 
     const handleSend = () => {
-        console.log("Sending recording:", mediaBlobUrl);
+        if (!email) {
+            setEmailError("Email is required... obviously.");
+            return;
+        }
+        if (!validateEmail(email)) {
+            setEmailError("Nice try, but that's not a real email.");
+            return;
+        }
+
+        console.log("Sending recording to:", email);
         setIsModalOpen(false);
         handleReset();
     };
 
     useEffect(() => {
+        if (isRecording) {
+            const interval = setInterval(() => {
+                setAudioLength(prev => prev + 1);
+                setWaveformData(prev => {
+                    const newData = [...prev, Math.random() * 0.8 + 0.2];
+                    return newData.slice(-100);
+                });
+            }, 150);
+            return () => clearInterval(interval);
+        }
+    }, [isRecording]);
+
+    useEffect(() => {
         if (!isModalOpen) handleReset();
     }, [isModalOpen]);
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
+    };
+
     return (
-        <section className="flex items-center justify-center py-16 px-4">
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center space-y-6"
-            >
-                <div className="space-y-2">
-                    <h2 className="text-2xl sm:text-3xl font-semibold text-foreground">
-                        Voice Command
-                    </h2>
-                    <p className="text-muted-foreground text-sm">
-                        I'm all ears... unless you're just practicing your beatboxing 🎶
+        <section className="flex items-center justify-center py-12 px-4 relative overflow-hidden">
+            {/* Wave background */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                {[0, 1, 2].map((i) => (
+                    <div
+                        key={i}
+                        className="absolute w-64 h-64 border-2 border-primary/20 rounded-full"
+                        style={{
+                            animation: `wave-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite`,
+                            animationDelay: `${i * 0.5}s`,
+                            transform: `scale(${1 + i * 0.2})`,
+                            opacity: 1 - i * 0.3
+                        }}
+                    />
+                ))}
+            </div>
+
+            <div className="text-center space-y-5 w-full max-w-md relative z-10">
+                <h2 className="text-2xl font-medium text-foreground">
+                    {TITLES[currentTitle]}
+                </h2>
+
+                <div
+                    className="relative mx-auto cursor-pointer group"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto relative">
+                        <div className="absolute inset-0 bg-primary/5 rounded-full animate-ping group-hover:animate-none opacity-70"></div>
+                        <div className="absolute w-12 h-12 rounded-full border border-primary/30 group-hover:scale-110 transition-transform duration-300"></div>
+                        <Mic className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
+                    </div>
+                    <p className="mt-4 text-sm text-muted-foreground min-h-[20px]">
+                        {MAIN_MESSAGES[currentMessage]}
                     </p>
                 </div>
 
-                <div className="relative flex items-center justify-center h-64 w-64">
-                
-                    {[1, 2, 3].map((i) => (
-                        <motion.div
-                            key={i}
-                            className="absolute inset-0 border-2 border-primary/40 rounded-full mx-auto my-auto"
-                            style={{
-                                width: `${40 + i * 20}%`,
-                                height: `${40 + i * 20}%`,
-                            }}
-                            animate={{
-                                scale: [1, 2],
-                                opacity: [0.4, 0],
-                            }}
-                            transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                delay: i * 0.3,
-                                ease: "easeOut"
-                            }}
-                        />
-                    ))}
-
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setIsModalOpen(true)}
-                        className="rounded-full w-16 h-16 bg-primary text-background hover:scale-105 transition relative z-10"
-                    >
-                        <motion.div
-                            animate={isRecording ? { scale: [1, 1.15] } : {}}
-                            transition={{ repeat: Infinity, duration: 1.5 }}
-                        >
-                            <Mic className="w-8 h-8" />
-                        </motion.div>
-                    </Button>
-                </div>
-
                 <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-                    <DialogContent className="sm:max-w-sm rounded-xl bg-popover border border-border p-6">
-                        <DialogHeader className="flex items-center justify-between mb-3">
-                            <div className="flex items-center gap-2">
-                                <Waves className="w-5 h-5 text-primary" />
-                                <DialogTitle className="text-lg text-foreground">
-                                    {status === "recording" ? "Listening..." : "Your Masterpiece"}
-                                </DialogTitle>
-                            </div>
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                className="text-muted-foreground hover:text-foreground"
-                                onClick={() => setIsModalOpen(false)}
-                            >
-                                <X className="w-4 h-4" />
-                            </Button>
-                        </DialogHeader>
-
-                        <div className="text-center space-y-4">
-                            <div className="relative">
-                                <motion.div
-                                    animate={status === "recording" ? { scale: [1, 1.1] } : {}}
-                                    transition={{ repeat: Infinity, duration: 1.2 }}
+                    <DialogContent className="sm:max-w-lg rounded-xl border-none shadow-lg p-0 overflow-hidden w-full">
+                        <div className="bg-gradient-to-b from-background to-background/95 backdrop-blur-sm px-4 pt-4 pb-5">
+                            <div className="flex items-center justify-between mb-6">
+                                <div>
+                                    <div className="text-sm font-medium text-foreground">
+                                        {status === "recording" ? "Recording..." : mediaBlobUrl ? "Preview" : "Ready to record"}
+                                    </div>
+                                    <div className="text-xs text-muted-foreground">
+                                        {status === "recording"
+                                            ? RECORDING_MESSAGES[currentRecordingMessage]
+                                            : mediaBlobUrl
+                                                ? "That's the masterpiece? Hmm."
+                                                : "I’m waiting... again."}
+                                    </div>
+                                </div>
+                                <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    className="h-8 w-8 rounded-full hover:bg-muted"
+                                    onClick={() => setIsModalOpen(false)}
                                 >
-                                    <Mic className="w-10 h-10 text-primary mx-auto" />
-                                </motion.div>
+                                    <X className="w-4 h-4" />
+                                </Button>
+                            </div>
+
+                            <div className="relative mb-6">
+                                {status === "recording" && (
+                                    <div className="flex items-end justify-between h-16 gap-0 mb-2 overflow-hidden w-full">
+                                        {waveformData.map((value, index) => (
+                                            <div
+                                                key={index}
+                                                className="bg-primary transition-all duration-150 ease-in-out"
+                                                style={{
+                                                    height: `${value * 100}%`,
+                                                    width: `${100 / waveformData.length}%`,
+                                                    opacity: (0.3 + (index / waveformData.length) * 0.7),
+                                                    transform: `scaleY(${0.8 + Math.sin(Date.now() / 200 + index * 0.3) * 0.2})`
+                                                }}
+                                            />
+                                        ))}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background w-full h-full pointer-events-none" />
+                                    </div>
+                                )}
+
+                                {mediaBlobUrl && !isRecording && (
+                                    <div className="w-full mb-4 space-y-4">
+                                        <audio
+                                            src={mediaBlobUrl}
+                                            controls
+                                            className="w-full h-12 rounded"
+                                            controlsList="nodownload noplaybackrate"
+                                        />
+                                        <div className="space-y-2">
+                                            <input
+                                                type="email"
+                                                placeholder="Enter your email... if you must"
+                                                className={`w-full px-4 py-2 rounded-lg border ${emailError ? "border-red-500" : "border-muted"
+                                                    } bg-background/80 focus:ring-2 focus:ring-primary/50`}
+                                                value={email}
+                                                onChange={(e) => {
+                                                    setEmail(e.target.value);
+                                                    setEmailError("");
+                                                }}
+                                            />
+                                            {emailError && (
+                                                <p className="text-red-500 text-xs text-left animate-shake">
+                                                    {emailError}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {status === "recording" && (
-                                    <motion.div
-                                        className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"
-                                        animate={{ scale: [1, 1.5], opacity: [0.8, 0] }}
-                                        transition={{ repeat: Infinity, duration: 1 }}
-                                    />
+                                    <div className="text-xs text-primary font-medium text-center">
+                                        {formatTime(audioLength)}
+                                    </div>
                                 )}
                             </div>
 
-                            {mediaBlobUrl ? (
-                                <div className="space-y-4">
-                                    <audio src={mediaBlobUrl} controls className="w-full rounded-md" />
-                                    <div className="flex justify-center gap-3">
-                                        <Button
-                                            onClick={handleSend}
-                                            className="gap-1 bg-primary text-background hover:bg-primary/80"
-                                        >
-                                            <Send className="w-4 h-4" />
-                                            Send Anyway
-                                        </Button>
+                            <div className="flex justify-center gap-3">
+                                {mediaBlobUrl && !isRecording ? (
+                                    <>
                                         <Button
                                             variant="outline"
                                             onClick={handleReset}
-                                            className="gap-1 text-muted-foreground border-border hover:bg-muted"
+                                            className="rounded-full h-10 px-4 border-muted-foreground/20"
                                         >
-                                            <RefreshCw className="w-4 h-4" />
-                                            Try Again
+                                            <RefreshCw className="w-4 h-4 mr-2" />
+                                            Retry
                                         </Button>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">
-                                        It's not too late to reconsider... 😉
-                                    </p>
-                                </div>
-                            ) : (
-                                <div className="space-y-4">
+                                        <Button
+                                            onClick={handleSend}
+                                            className="rounded-full h-10 px-4 bg-primary text-primary-foreground hover:bg-primary/90"
+                                        >
+                                            <Send className="w-4 h-4 mr-2" />
+                                            Send
+                                        </Button>
+                                    </>
+                                ) : (
                                     <Button
                                         onClick={handleRecording}
                                         className={cn(
-                                            "rounded-full px-6 py-3 text-sm font-medium gap-2",
+                                            "rounded-full h-12 w-12 flex items-center justify-center transition-all",
                                             status === "recording"
-                                                ? "bg-red-500 text-white hover:bg-red-400"
-                                                : "bg-primary text-background hover:bg-primary/80"
+                                                ? "bg-red-500 text-white hover:bg-red-600 animate-pulse"
+                                                : "bg-primary text-primary-foreground hover:bg-primary/90"
                                         )}
                                     >
-                                        {status === "recording" ? "Stop" : "Start"} Recording
+                                        {status === "recording" ? (
+                                            <span className="w-3 h-3 rounded bg-white animate-pulse" />
+                                        ) : (
+                                            <Mic className="w-5 h-5" />
+                                        )}
                                     </Button>
-                                    <p className="text-sm text-muted-foreground">
-                                        Don't worry, I've heard worse. Probably.
-                                    </p>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </DialogContent>
                 </Dialog>
-            </motion.div>
+            </div>
+
+            <style jsx global>{`
+                @keyframes wave-pulse {
+                    0% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: scale(1.5);
+                        opacity: 0;
+                    }
+                }
+                .animate-shake {
+                    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+                }
+                @keyframes shake {
+                    10%, 90% { transform: translateX(-1px); }
+                    20%, 80% { transform: translateX(2px); }
+                    30%, 50%, 70% { transform: translateX(-3px); }
+                    40%, 60% { transform: translateX(3px); }
+                }
+            `}</style>
         </section>
     );
 }

@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 const projects = [
     {
@@ -53,7 +54,7 @@ export function ProjectsSection() {
                     Featured Projects
                 </motion.h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[300px]">
                     {projects.map((project, index) => (
                         <motion.div
                             key={project.title}
@@ -61,9 +62,15 @@ export function ProjectsSection() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-50px" }}
                             transition={{ delay: index * 0.1 }}
+                            className={cn(
+                                "row-span-1 rounded-xl group",
+                                index === 0 ? "md:col-span-2 md:row-span-2" : "",
+                                index === 1 ? "md:row-span-2" : "",
+                                index === 3 ? "md:col-span-2" : ""
+                            )}
                         >
-                            <Card className="h-full flex flex-col group overflow-hidden hover:shadow-lg transition-shadow">
-                                <div className="relative aspect-video overflow-hidden">
+                            <Card className="h-full flex flex-col group overflow-hidden hover:shadow-lg transition-shadow relative">
+                                <div className="relative h-full overflow-hidden">
                                     <Image
                                         src={project.image}
                                         alt={project.title}
@@ -72,49 +79,49 @@ export function ProjectsSection() {
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         priority={index === 0}
                                     />
-                                </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
 
-                                <div className="p-6 flex flex-col flex-grow">
-                                    <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                                    <p className="text-muted-foreground mb-4 flex-grow">
-                                        {project.description}
-                                    </p>
+                                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                                        <h3 className="text-lg md:text-xl font-semibold mb-2">
+                                            {project.title}
+                                        </h3>
+                                        <p className="text-xs md:text-sm line-clamp-2 mb-3 md:mb-4 opacity-90">
+                                            {project.description}
+                                        </p>
 
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {project.tech.map((tech) => (
-                                            <Badge
-                                                key={tech}
-                                                variant="outline"
-                                                className="text-sm font-mono px-3 py-1"
-                                            >
-                                                {tech}
-                                            </Badge>
-                                        ))}
+                                        <div className="flex flex-wrap gap-2">
+                                            {project.tech.slice(0, 3).map((tech) => (
+                                                <Badge
+                                                    key={tech}
+                                                    variant="secondary"
+                                                    className="text-[0.65rem] md:text-xs font-mono px-2 py-1 bg-black/40 backdrop-blur-md border-transparent"
+                                                >
+                                                    {tech}
+                                                </Badge>
+                                            ))}
+                                        </div>
                                     </div>
 
-                                    <div className="flex gap-3 mt-auto">
+                                    <div className="absolute top-3 right-3 flex gap-2">
                                         {project.repo && (
                                             <Button
                                                 asChild
-                                                variant="outline"
+                                                variant="ghost"
                                                 size="sm"
-                                                className="gap-2"
+                                                className="rounded-full backdrop-blur-md bg-black/40 hover:bg-black/60 text-white h-8 w-8 p-0"
                                             >
                                                 <Link href={project.repo} target="_blank">
                                                     <Github className="h-4 w-4" />
-                                                    Repository
                                                 </Link>
                                             </Button>
                                         )}
-
                                         {project.liveLink && (
                                             <Button
                                                 asChild
                                                 size="sm"
-                                                className="gap-2"
+                                                className="rounded-full backdrop-blur-md bg-black/40 hover:bg-black/60 text-white h-8 w-8 p-0"
                                             >
                                                 <Link href={project.liveLink} target="_blank">
-                                                    Live Demo
                                                     <ArrowUpRight className="h-4 w-4" />
                                                 </Link>
                                             </Button>
