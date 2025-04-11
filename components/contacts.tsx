@@ -21,17 +21,17 @@ export function ContactTabs() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto rounded-xl border bg-background shadow-lg">
+    <div className="w-[60vw] mx-auto rounded-xl border bg-background shadow-lg">
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "form" | "voice")}>
-        <TabsList className="grid w-full grid-cols-2 rounded-t-lg rounded-b-none h-14">
-          <TabsTrigger 
-            value="form" 
+        <TabsList className="grid grid-cols-2 rounded-t-lg rounded-b-none h-14">
+          <TabsTrigger
+            value="form"
             className="data-[state=active]:bg-muted data-[state=active]:shadow-sm"
           >
             📝 Text Message
           </TabsTrigger>
-          <TabsTrigger 
-            value="voice" 
+          <TabsTrigger
+            value="voice"
             className="data-[state=active]:bg-muted data-[state=active]:shadow-sm"
           >
             🎤 Voice Message
@@ -44,7 +44,7 @@ export function ContactTabs() {
               <label className="text-sm font-medium">Name</label>
               <Input
                 value={formData.name}
-                onChange={(e: { target: { value: any; }; }) => setFormData({...formData, name: e.target.value})}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="Your name"
                 required
               />
@@ -55,7 +55,7 @@ export function ContactTabs() {
               <Input
                 type="email"
                 value={formData.email}
-                onChange={(e: { target: { value: any; }; }) => setFormData({...formData, email: e.target.value})}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, email: e.target.value })}
                 placeholder="your@email.com"
                 required
               />
@@ -65,7 +65,7 @@ export function ContactTabs() {
               <label className="text-sm font-medium">Message</label>
               <Textarea
                 value={formData.message}
-                onChange={(e: { target: { value: any; }; }) => setFormData({...formData, message: e.target.value})}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, message: e.target.value })}
                 placeholder="Type your message here..."
                 rows={4}
                 required

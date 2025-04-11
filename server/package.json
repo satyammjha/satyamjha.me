@@ -1,0 +1,20 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/satyammjha/satyamjha.me#readme",
+  "bugs": {
+    "url": "https://github.com/satyammjha/satyamjha.me/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satyammjha/satyamjha.me.git"
+  },
+  "license": "ISC",
+  "author": "Satyam Jha",
+  "type": "commonjs",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

@@ -6,64 +6,61 @@ import { parseISO, format, eachDayOfInterval, subWeeks, startOfWeek } from 'date
 const GitHubContributionGarden = () => {
     const username = "satyammjha";
     const [loading, setLoading] = useState(true);
+    const [contributionData, setContributionData] = useState<{ date: Date; intensity: number; count: number }[][]>([]);
+    const [totalContributions, setTotalContributions] = useState(0);
 
-    const generateContributionData = () => {
-        const today = new Date();
-        const startDate = startOfWeek(subWeeks(today, 51), { weekStartsOn: 0 });
-        const days = eachDayOfInterval({ start: startDate, end: today });
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch("http://localhost:5000/commits");
+                const rawData = await res.json();
 
-        const data: { date: Date; intensity: number; }[][] = [];
-        let weekData: { date: Date; intensity: number; }[] = [];
+                // Calculate end date as last Saturday
+                const endDate = startOfWeek(new Date(), { weekStartsOn: 0 });
+                endDate.setDate(endDate.getDate() - 1);
 
-        days.forEach((date: Date, index: number) => {
-            const intensity = calculateIntensity(date);
-            weekData.push({ date, intensity });
+                // Calculate start date as 52 weeks before end date
+                const startDate = new Date(endDate);
+                startDate.setDate(startDate.getDate() - (52 * 7 - 1));
 
-            if ((index + 1) % 7 === 0) {
-                data.push(weekData);
-                weekData = [];
+                const allDays = eachDayOfInterval({ start: startDate, end: endDate });
+                const dateMap = new Map(rawData.map((entry: { date: string, count: number }) =>
+                    [entry.date, entry.count]
+                ));
+
+                let weeklyData: { date: Date; intensity: number; count: number }[][] = [];
+                let week: { date: Date; intensity: number; count: number }[] = [];
+                let total = 0;
+
+                allDays.forEach((day, index) => {
+                    const formatted = format(day, "yyyy-MM-dd");
+                    const count = Number(dateMap.get(formatted) || 0);
+                    total += count;
+
+                    let intensity = 0;
+                    if (count > 0 && count <= 2) intensity = 1;
+                    else if (count <= 5) intensity = 2;
+                    else if (count <= 10) intensity = 3;
+                    else if (count > 10) intensity = 4;
+
+                    week.push({ date: day, intensity, count });
+
+                    if ((index + 1) % 7 === 0) {
+                        weeklyData.push(week);
+                        week = [];
+                    }
+                });
+
+                setContributionData(weeklyData);
+                setTotalContributions(total);
+                setLoading(false);
+            } catch (err) {
+                console.error("Error fetching commits:", err);
             }
-        });
+        };
 
-        return data;
-    };
-    const calculateIntensity = (date: Date) => {
-        const yearStart = new Date(date.getFullYear(), 0, 1);
-        const yearEnd = new Date(date.getFullYear() + 1, 0, 1);
-        const yearProgress = (date.getTime() - yearStart.getTime()) /
-            (yearEnd.getTime() - yearStart.getTime());
-
-        let intensity = 0;
-        const month = date.getMonth();
-        const day = date.getDay();
-        const isWeekend = day === 0 || day === 6;
-
-        if (month >= 10) {
-            intensity = Math.random() > 0.3 ? Math.floor(Math.random() * 4) + 1 : 0;
-        } else if (month >= 6 && month <= 8) {
-            intensity = Math.random() > 0.6 ? Math.floor(Math.random() * 2) + 1 : 0;
-        } else if (month >= 3 && month <= 5) {
-            intensity = Math.random() > 0.4 ? Math.floor(Math.random() * 3) + 1 : 0;
-        } else {
-            intensity = Math.random() > 0.5 ? Math.floor(Math.random() * 4) : 0;
-        }
-
-        if (month === 2 || month === 9) {
-            intensity = Math.min(4, intensity + 1);
-        }
-
-        if (isWeekend && intensity > 0) {
-            intensity = Math.max(1, intensity - 1);
-        }
-
-        if (!isWeekend && date.getDate() <= 7 && Math.random() > 0.8) {
-            intensity = Math.min(4, intensity + 1);
-        }
-
-        return intensity;
-    };
-    const contributionData = generateContributionData();
-    const totalContributions = contributionData.flat().reduce((sum, { intensity }) => sum + intensity, 0) * 3;
+        fetchData();
+    }, []);
 
     const plants = [
         { emoji: '🌱', color: 'bg-emerald-100 dark:bg-emerald-900/50', text: 'text-emerald-600 dark:text-emerald-300' },
@@ -71,11 +68,6 @@ const GitHubContributionGarden = () => {
         { emoji: '🌷', color: 'bg-pink-100 dark:bg-pink-900/50', text: 'text-pink-600 dark:text-pink-300' },
         { emoji: '🌸', color: 'bg-rose-100 dark:bg-rose-900/50', text: 'text-rose-600 dark:text-rose-300' },
     ];
-
-    useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 800);
-        return () => clearTimeout(timer);
-    }, []);
 
     if (loading) {
         return (
@@ -106,17 +98,17 @@ const GitHubContributionGarden = () => {
                     <div className="inline-grid grid-flow-col gap-1">
                         {contributionData.map((week, weekIndex) => (
                             <div key={weekIndex} className="grid gap-1">
-                                {week.map(({ date, intensity }) => (
+                                {week.map(({ date, intensity, count }) => (
                                     <TooltipProvider key={date.toString()} delayDuration={0}>
-                                        <Tooltip key={date.toString()}>
+                                        <Tooltip>
                                             <TooltipTrigger className="h-6 w-6 relative">
                                                 <div className={`
-                        h-full w-full rounded-sm flex items-center justify-center
-                        ${plants[intensity]?.color || 'bg-background'}
-                        ${intensity > 0 ? 'hover:scale-110 transition-transform' : ''}
-                      `}>
-                                                    <span className={`${intensity > 0 ? plants[Math.min(intensity, plants.length - 1)].text : ''} text-sm`}>
-                                                        {intensity > 0 ? plants[Math.min(intensity, plants.length - 1)].emoji : ''}
+                                                    h-full w-full rounded-sm flex items-center justify-center
+                                                    ${intensity > 0 ? plants[Math.min(intensity - 1, plants.length - 1)].color : 'bg-background'}
+                                                    ${intensity > 0 ? 'hover:scale-110 transition-transform' : ''}
+                                                `}>
+                                                    <span className={`${intensity > 0 ? plants[Math.min(intensity - 1, plants.length - 1)].text : ''} text-sm`}>
+                                                        {intensity > 0 ? plants[Math.min(intensity - 1, plants.length - 1)].emoji : ''}
                                                     </span>
                                                 </div>
                                             </TooltipTrigger>
@@ -125,7 +117,7 @@ const GitHubContributionGarden = () => {
                                                     {format(date, 'MMM d, yyyy')}
                                                 </p>
                                                 <p className="text-xs text-muted-foreground">
-                                                    {intensity * 3} contributions
+                                                    {count} contribution{count !== 1 ? 's' : ''}
                                                 </p>
                                             </TooltipContent>
                                         </Tooltip>
@@ -138,14 +130,33 @@ const GitHubContributionGarden = () => {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                {plants.map((plant, index) => (
-                    <div key={index} className="flex items-center gap-1.5">
-                        <span className={`text-sm ${plant.text}`}>{plant.emoji}</span>
-                        <span className="text-xs text-muted-foreground">
-                            {index * 3 + 1}-{index * 3 + 3} contributions
-                        </span>
-                    </div>
-                ))}
+                {plants.map((plant, index) => {
+                    let range;
+                    switch (index) {
+                        case 0:
+                            range = '1-2 contributions';
+                            break;
+                        case 1:
+                            range = '3-5 contributions';
+                            break;
+                        case 2:
+                            range = '6-10 contributions';
+                            break;
+                        case 3:
+                            range = '11+ contributions';
+                            break;
+                        default:
+                            range = '';
+                    }
+                    return (
+                        <div key={index} className="flex items-center gap-1.5">
+                            <span className={`text-sm ${plant.text}`}>{plant.emoji}</span>
+                            <span className="text-xs text-muted-foreground">
+                                {range}
+                            </span>
+                        </div>
+                    );
+                })}
             </div>
 
             <div className="mt-6 text-center">
