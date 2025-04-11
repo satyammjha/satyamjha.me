@@ -3,6 +3,7 @@ import cors from "cors";
 import { Request, Response } from "express";
 import router from "./routes/getCommitRoute";
 import voicerouter from "./routes/voiceRoute";
+import messageRouter from "./routes/messageRoute"
 const app = express();
 
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use('/', router)
 app.use('/', voicerouter);
+app.use('/', messageRouter);
 
 app.listen(5000, () => {
     console.log("Server is running on port 5000");

@@ -29,6 +29,7 @@ const sendVoiceNote = async (req: Request, res: Response) => {
                 pass: process.env.EMAIL_PASSWORD,
             },
         });
+        
         const mailOptions = {
             from: `Voice Notes App <${process.env.EMAIL_ADDRESS}>`,
             to: "satyammjha0@gmail.com",

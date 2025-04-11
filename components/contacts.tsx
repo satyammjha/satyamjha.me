@@ -6,19 +6,50 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { VoiceRecorderSection } from "../components/recorder";
+import axios from "axios";
+import { useToast } from "../hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast"
 
 export function ContactTabs() {
+  const { toast } = useToast();
+  const [isSending, setIsSending] = useState(false);
   const [activeTab, setActiveTab] = useState<"form" | "voice">("form");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: ""
+    message: "",
+    subject: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form data:", formData);
+    setIsSending(true);
+    try {
+      const response = await axios.post("http://localhost:5000/sendMsg", formData);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+        subject: ""
+      });
+      if (response.status === 200) {
+        toast({
+          title: "✅ Message Sent!",
+          description: `${response.data.message || "We’ll get back to you soon."}`,
+        });
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast({
+        title: "❌ Failed to send",
+        description: "Please try again later.",
+        action: <ToastAction altText="Try again">Retry</ToastAction>,
+      });
+    } finally {
+      setIsSending(false); // Stop loading
+    }
   };
+
 
   return (
     <div className="w-[60vw] mx-auto rounded-xl border bg-background shadow-lg">
@@ -60,6 +91,16 @@ export function ContactTabs() {
                 required
               />
             </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Subject</label>
+              <Input
+                type="text"
+                value={formData.subject}
+                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, subject: e.target.value })}
+                placeholder="subject"
+                required
+              />
+            </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium">Message</label>
@@ -72,8 +113,8 @@ export function ContactTabs() {
               />
             </div>
 
-            <Button type="submit" className="w-full">
-              Send Message
+            <Button type="submit" className="w-full" disabled={isSending}>
+              {isSending ? "Sending..." : "Send Message"}
             </Button>
           </form>
         </TabsContent>

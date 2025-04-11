@@ -7,22 +7,25 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import axios from "axios";
+import { ToastAction } from "./ui/toast";
+import { useToast } from "@/hooks/use-toast";
 
 const MAIN_MESSAGES = [
-    "I promise not to listen... much.",
-    "Your voice is my favorite sound... said no one ever.",
-    "Go ahead, I've got all day... not.",
-    "I’m all ears (unfortunately).",
-    "Your voice note is my command... sigh.",
-    "Wow, you’re actually using this?",
+    "I’ll pretend to care… with *style*",
+    "Your voice is my *absolute* favorite… (said every text-to-speech app ever)",
+    "Ready to record your masterpiece? 🎙️🔫",
+    "I’m legally required to say I respect your privacy*",
+    "Voice notes: Because typing is *so* 2023",
+    "Wow, you found the mic button! 🏆",
 ];
 
 const RECORDING_MESSAGES = [
-    "Keep going, I’m barely awake...",
-    "Is this story going somewhere?",
-    "Fascinating... said no one ever.",
-    "I've heard better from parrots.",
-    "Don't stop now... or do.",
+    "Keep talking… *subtle glance at stop button*",
+    "This better be Nobel Prize material…",
+    "*Mental note*: Add 'endless voice memo' to list of fears",
+    "Enthralling. Truly. *Checks imaginary watch*",
+    "Plot twist: I’m just miming recording 🎭",
+    "Still going? How… *brave* of you 🎙️😒",
 ];
 
 export function VoiceRecorderSection() {
@@ -32,8 +35,10 @@ export function VoiceRecorderSection() {
     const [waveformData, setWaveformData] = useState<number[]>([]);
     const [currentMessage, setCurrentMessage] = useState(0);
     const [currentRecordingMessage, setCurrentRecordingMessage] = useState(0);
+    const [isSending, setIsSending] = useState(false);
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState("");
+    const { toast } = useToast()
 
     const {
         startRecording,
@@ -113,7 +118,7 @@ export function VoiceRecorderSection() {
             setEmailError("Nice try, but that's not a real email.");
             return;
         }
-
+        setIsSending(true);
         try {
             if (!mediaBlobUrl) {
                 throw new Error("No mediaBlobUrl available for fetching.");
@@ -127,8 +132,12 @@ export function VoiceRecorderSection() {
             formData.append("audio", file);
 
             await axios.post("http://localhost:5000/sendNote", formData);
-
+            setIsSending(false);
             setIsModalOpen(false);
+            toast({
+                title: "✅ Voice Note Sent!",
+                description: "We’ll get back to you soon.",
+            });
             handleReset();
         } catch (error) {
             console.error("Error sending voice note:", error);
@@ -212,7 +221,7 @@ export function VoiceRecorderSection() {
                                                 : "I’m waiting... again."}
                                     </div>
                                 </div>
-                              
+
                             </div>
 
                             <div className="relative mb-6">
@@ -286,7 +295,7 @@ export function VoiceRecorderSection() {
                                             className="rounded-full h-10 px-4 bg-primary text-primary-foreground hover:bg-primary/90"
                                         >
                                             <Send className="w-4 h-4 mr-2" />
-                                            Send
+                                            {isSending ? "Sending..." : "Send"}
                                         </Button>
                                     </>
                                 ) : (
