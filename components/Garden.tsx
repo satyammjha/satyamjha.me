@@ -15,11 +15,9 @@ const GitHubContributionGarden = () => {
                 const res = await fetch("http://localhost:5000/commits");
                 const rawData = await res.json();
 
-                // Calculate end date as last Saturday
                 const endDate = startOfWeek(new Date(), { weekStartsOn: 0 });
                 endDate.setDate(endDate.getDate() - 1);
 
-                // Calculate start date as 52 weeks before end date
                 const startDate = new Date(endDate);
                 startDate.setDate(startDate.getDate() - (52 * 7 - 1));
 

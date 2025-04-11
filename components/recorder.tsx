@@ -6,6 +6,7 @@ import { useReactMediaRecorder } from "react-media-recorder";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import axios from "axios";
 
 const MAIN_MESSAGES = [
     "I promise not to listen... much.",
@@ -103,7 +104,7 @@ export function VoiceRecorderSection() {
         setEmailError("");
     };
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!email) {
             setEmailError("Email is required... obviously.");
             return;
@@ -113,9 +114,26 @@ export function VoiceRecorderSection() {
             return;
         }
 
-        console.log("Sending recording to:", email);
-        setIsModalOpen(false);
-        handleReset();
+        try {
+            if (!mediaBlobUrl) {
+                throw new Error("No mediaBlobUrl available for fetching.");
+            }
+            const response = await fetch(mediaBlobUrl);
+            const blob = await response.blob();
+            const file = new File([blob], "voice-note.webm", { type: blob.type });
+
+            const formData = new FormData();
+            formData.append("email", email);
+            formData.append("audio", file);
+
+            await axios.post("http://localhost:5000/sendNote", formData);
+
+            setIsModalOpen(false);
+            handleReset();
+        } catch (error) {
+            console.error("Error sending voice note:", error);
+            setEmailError("Failed to send. Try again?");
+        }
     };
 
     useEffect(() => {
@@ -143,7 +161,7 @@ export function VoiceRecorderSection() {
 
     return (
         <section className="flex items-center justify-center py-12 px-4 relative overflow-hidden">
-            {/* Wave background */}
+
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 {[0, 1, 2].map((i) => (
                     <div
@@ -194,14 +212,7 @@ export function VoiceRecorderSection() {
                                                 : "I’m waiting... again."}
                                     </div>
                                 </div>
-                                <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="h-8 w-8 rounded-full hover:bg-muted"
-                                    onClick={() => setIsModalOpen(false)}
-                                >
-                                    <X className="w-4 h-4" />
-                                </Button>
+                              
                             </div>
 
                             <div className="relative mb-6">
@@ -252,11 +263,11 @@ export function VoiceRecorderSection() {
                                     </div>
                                 )}
 
-                                {status === "recording" && (
+                                {/* {status === "recording" && (
                                     <div className="text-xs text-primary font-medium text-center">
                                         {formatTime(audioLength)}
                                     </div>
-                                )}
+                                )} */}
                             </div>
 
                             <div className="flex justify-center gap-3">

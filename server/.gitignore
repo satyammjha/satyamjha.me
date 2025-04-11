@@ -4,3 +4,5 @@ coverage
 
 *.log
 *.env
+bun.lock
+package-lock.json
