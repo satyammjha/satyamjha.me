@@ -62,6 +62,10 @@ module.exports = {
               xl: '24px',
               '2xl': '40px',
             }
+          },
+          fontFamily: {
+            display: ['var(--font-geist-sans)'],
+            mono: ['var(--font-geist-mono)']
           }
         }
 

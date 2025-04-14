@@ -8,6 +8,7 @@ import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
+import Head from "next/head"
 
 export const metadata: Metadata = {
   title: {
@@ -29,7 +30,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <head />
+        <Head children={undefined} />
         <body
           className={cn(
             "min-h-screen bg-background font-sans antialiased",

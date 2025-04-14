@@ -28,7 +28,7 @@ const testimonials = [
     },
 ];
 
-export function TestimonialsSection() {
+export default function TestimonialsSection() {
     const containerRef = useRef(null);
     const isMobile = useMediaQuery('(max-width: 768px)');
     const testimonialCount = testimonials.length;

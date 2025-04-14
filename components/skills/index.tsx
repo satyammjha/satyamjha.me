@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import React from "react";
 
-export function SkillsSection() {
+export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState<keyof typeof skills>("languages");
   const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);

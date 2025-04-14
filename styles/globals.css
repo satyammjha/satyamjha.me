@@ -24,8 +24,9 @@
     --destructive-foreground: 210 40% 98%;
     --ring: 215 20.2% 65.1%;
     --radius: 0.5rem;
+    --font-geist-sans: "Geist Sans", sans-serif;
+    --font-geist-mono: "Geist Mono", monospace;
   }
-
   .dark {
     --background: 224 71% 4%;
     --foreground: 213 31% 91%;
@@ -78,7 +79,6 @@
     background-size: 200% 200%;
   }
 
-  /* Scrollbar hiding */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -86,4 +86,12 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
 }

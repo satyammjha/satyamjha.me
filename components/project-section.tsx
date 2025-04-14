@@ -41,7 +41,7 @@ const projects = [
     }
 ];
 
-export function ProjectsSection() {
+export default function ProjectsSection() {
     return (
         <section className="py-16 px-4 md:px-8">
             <div className="container max-w-6xl mx-auto">

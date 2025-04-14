@@ -1,43 +1,50 @@
 'use client';
+import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
-import QuoteCard from '@/components/quoteCard';
-import AboutSection from '@/components/about-section';
-import { SkillsSection } from '../components/skills';
-import { ProjectsSection } from '@/components/project-section';
-import { TestimonialsSection } from '@/components/testimonials-section';
-import { Footer } from '@/components/footer';
-import { VoiceRecorderSection } from '@/components/recorder';
-import { ContactTabs } from '@/components/contacts';
-import GitHubContributionGarden from '@/components/Garden';
+import Skeleton from '../components/Skeleton';
+import { useEffect } from 'react';
+
+const AboutSection = dynamic(() => import('@/components/about-section'), {
+  loading: () => <Skeleton className="h-[200px] w-full" />,
+  ssr: false
+});
+
+const SkillsSection = dynamic(() => import('../components/skills/index'), {
+  loading: () => <Skeleton className="h-[200px] w-full" />,
+  ssr: false
+});
+
+const ProjectsSection = dynamic(() => import('../components/project-section'), {
+  loading: () => <Skeleton className="h-[300px] w-full" />,
+  ssr: false
+});
+
+const LazyComponents = dynamic(() => import('@/components/Lazy/LazyComponents'), {
+  loading: () => <div className="space-y-16"><Skeleton className="h-[150px] w-full" /></div>,
+  ssr: false
+});
 
 export default function IndexPage() {
+  useEffect(() => {
+    const preload = async () => {
+      const { preload } = await import('@/lib/preload');
+      preload(['/components/about-section', '/components/skills/index']);
+    };
+    window.requestIdleCallback(preload);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto flex flex-col gap-16 px-4 sm:px-6 lg:px-8 py-12">
-        <section className="min-h-[80vh] flex flex-col justify-center">
+      <main className="mx-auto flex flex-col space-y-16 px-4 sm:px-6 lg:px-8 py-12">
+        <section className="min-h-screen grid place-items-center">
           <Hero />
         </section>
 
         <AboutSection />
-
-        <section>
-          <GitHubContributionGarden />
-        </section>
-
-        <QuoteCard />
-
-        <VoiceRecorderSection />
-
         <SkillsSection />
 
-        <TestimonialsSection />
-
-        <ProjectsSection />
-
-        <ContactTabs />
-
-        <Footer />
-      </div>
+        <LazyComponents />
+      </main>
     </div>
   );
 }

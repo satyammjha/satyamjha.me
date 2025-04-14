@@ -4,16 +4,11 @@ export const siteConfig = {
   name: "@satyammjha",
   description:
     "Beautifully designed components built with Radix UI and Tailwind CSS.",
-  // mainNav: [
-  //   {
-  //     title: "Home",
-  //     href: "/",
-  //   },
-  // ],
+  mainNav: [],
   links: {
-    twitter: "https://twitter.com/x.com",
+    twitter: "https://x.com/satyammjha",
     github: "https://github.com/satyammjha",
     linkedin: "https://www.linkedin.com/in/satyammjha/",
-    docs: "https://ui.shadcn.com",
+    leetcode: "https://leetcode.com/satyammjha/",
   },
 }

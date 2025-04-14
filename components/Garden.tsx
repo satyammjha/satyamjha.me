@@ -158,9 +158,8 @@ const GitHubContributionGarden = () => {
                     <span className="text-xl">🌳</span>
                 </div>
                 <div>
-                    <h2 className="text-xl font-semibold text-card-foreground">
-                        {username}'s Garden
-                    </h2>
+                    {username}'s Ghost Town 🌵
+                    <span className="text-sm ml-2 text-muted-foreground">Population: {totalContributions}</span>
                     <p className="text-sm text-muted-foreground">
                         {totalContributions} contributions •{" "}
                         {dateRange.start && format(dateRange.start, "MMM d, yyyy")} –{" "}

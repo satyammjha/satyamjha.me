@@ -28,7 +28,7 @@ const RECORDING_MESSAGES = [
     "Still going? How… *brave* of you 🎙️😒",
 ];
 
-export function VoiceRecorderSection() {
+export default function VoiceRecorderSection() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [audioLength, setAudioLength] = useState(0);

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Github } from "lucide-react";
 
-export function Footer() {
+function Footer() {
   return (
     <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="container mx-auto px-4 py-6 md:py-8">
@@ -29,3 +29,5 @@ export function Footer() {
     </footer>
   );
 }
+
+export default Footer;

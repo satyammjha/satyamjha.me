@@ -5,12 +5,12 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../components/ui/textarea";
-import { VoiceRecorderSection } from "../components/recorder";
+import VoiceRecorderSection from "../components/recorder";
 import axios from "axios";
 import { useToast } from "../hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast"
 
-export function ContactTabs() {
+export default function ContactTabs() {
   const { toast } = useToast();
   const [isSending, setIsSending] = useState(false);
   const [activeTab, setActiveTab] = useState<"form" | "voice">("form");
