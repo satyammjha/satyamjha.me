@@ -1,16 +1,14 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import dynamic from "next/dynamic"
-
-import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
-import { cn } from "@/lib/utils"
-
 import { SiteHeader } from "@/components/site-header"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { Preloader } from "@/components/Preloader"
+import { cn } from "@/lib/utils"
+import { fontSans } from "@/lib/fonts"
+import { siteConfig } from "@/config/site"
+import { RouteChangeLoader } from "@/components/RouteChangerLoader"
 
 export const metadata: Metadata = {
   title: {
@@ -27,11 +25,7 @@ export const viewport = {
   ],
 }
 
-interface RootLayoutProps {
-  children: React.ReactNode
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -41,8 +35,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <RouteChangeLoader />
+          <Preloader /> 
           <div className="relative flex min-h-screen flex-col">
-            <Preloader />
             <SiteHeader />
             <main className="flex-1">{children}</main>
             <Toaster />

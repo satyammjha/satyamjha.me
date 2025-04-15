@@ -11,14 +11,21 @@ import React from "react";
 
 export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState<keyof typeof skills>("languages");
-  const [autoScrollEnabled, setAutoScrollEnabled] = useState(true);
+  const [autoScrollEnabled, setAutoScrollEnabled] = useState(false);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
   const skillsContainerRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement }>({});
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const initialized = useRef(false);
 
   const categories = Object.keys(skills) as Array<keyof typeof skills>;
+
   useEffect(() => {
+    if (!initialized.current) {
+      initialized.current = true;
+      return;
+    }
+
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -85,9 +92,8 @@ export default function SkillsSection() {
     setSelectedSkill(selectedSkill === skill ? null : skill);
   };
 
-
   return (
-    <section className="relative py-12 md:py-20 px-4 bg-background">
+    <section className="relative py-12 md:py-20 px-4 bg-background" id="skills">
       <div className="mx-auto max-w-max">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}

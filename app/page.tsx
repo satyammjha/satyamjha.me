@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import Skeleton from '../components/Skeleton';
 import { useEffect } from 'react';
+import { BlogGrid } from '@/components/BlogGrid';
+import { allBlogs } from '@/data/blogs';
 
 const AboutSection = dynamic(() => import('@/components/about-section'), {
   loading: () => <Skeleton className="h-[200px] w-full" />,
@@ -33,6 +35,13 @@ export default function IndexPage() {
       <main className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8 ">
         <Hero />
         <AboutSection />
+        <BlogGrid blogs={allBlogs.map(blog => ({
+        slug: blog.slug,
+        title: blog.title,
+        excerpt: blog.excerpt, 
+        date: blog.date,
+        image: blog.image
+      }))} />
         <SkillsSection />
         <LazyComponents />
       </main>

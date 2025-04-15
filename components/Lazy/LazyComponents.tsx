@@ -4,9 +4,6 @@ import Skeleton from '../Skeleton';
 import ProjectsSection from '../project-section';
 
 export default function LazyComponents() {
-  const QuoteCard = dynamic(() => import('@/components/quoteCard'), {
-    loading: () => <Skeleton className="h-[100px] w-full" />
-  });
 
   const TestimonialsSection = dynamic(() => import('@/components/testimonials-section'), {
     loading: () => <Skeleton className="h-[200px] w-full" />
@@ -22,9 +19,6 @@ export default function LazyComponents() {
 
   return (
     <>
-      <div className='w-[10vw]'>
-        <QuoteCard />
-      </div>
       <LazyVoiceRecorder />
       <TestimonialsSection />
       <ProjectsSection />

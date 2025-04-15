@@ -65,7 +65,7 @@ module.exports = {
           },
           fontFamily: {
             display: ['var(--font-orbitron)', 'var(--font-geist-sans)'],
-            mono: ['var(--font-roboto-mono)', 'var(--font-geist-mono)']
+            mono: ["Source Code Pro", 'monospace', 'var(--font-roboto-mono)', 'var(--font-geist-mono)']
           }
         }
 
