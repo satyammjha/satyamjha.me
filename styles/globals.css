@@ -73,19 +73,14 @@
       background-position: 100% 50%;
     }
   }
+}
 
-  .animate-gradient {
-    animation: gradient 12s ease infinite;
-    background-size: 200% 200%;
-  }
-
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 .card {
@@ -94,4 +89,10 @@
 
 .card:hover {
   transform: translateY(-4px);
+}
+.preloader {
+  will-change: opacity, backdrop-filter;
+}
+.loading-circle {
+  will-change: transform, border-color;
 }

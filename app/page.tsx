@@ -14,11 +14,6 @@ const SkillsSection = dynamic(() => import('../components/skills/index'), {
   ssr: false
 });
 
-const ProjectsSection = dynamic(() => import('../components/project-section'), {
-  loading: () => <Skeleton className="h-[300px] w-full" />,
-  ssr: false
-});
-
 const LazyComponents = dynamic(() => import('@/components/Lazy/LazyComponents'), {
   loading: () => <div className="space-y-16"><Skeleton className="h-[150px] w-full" /></div>,
   ssr: false
@@ -35,14 +30,10 @@ export default function IndexPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto flex flex-col space-y-16 px-4 sm:px-6 lg:px-8 py-12">
-        <section className="min-h-screen grid place-items-center">
-          <Hero />
-        </section>
-
+      <main className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8 ">
+        <Hero />
         <AboutSection />
         <SkillsSection />
-
         <LazyComponents />
       </main>
     </div>

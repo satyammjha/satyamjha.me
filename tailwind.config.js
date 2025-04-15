@@ -64,8 +64,8 @@ module.exports = {
             }
           },
           fontFamily: {
-            display: ['var(--font-geist-sans)'],
-            mono: ['var(--font-geist-mono)']
+            display: ['var(--font-orbitron)', 'var(--font-geist-sans)'],
+            mono: ['var(--font-roboto-mono)', 'var(--font-geist-mono)']
           }
         }
 
