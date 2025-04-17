@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import VoiceRecorderSection from "../components/recorder";
 import axios from "axios";
 import { useToast } from "../hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast"
+import { ToastAction } from "@/components/ui/toast";
 
 export default function ContactTabs() {
   const { toast } = useToast();
@@ -26,101 +26,97 @@ export default function ContactTabs() {
     setIsSending(true);
     try {
       const response = await axios.post("http://localhost:5000/sendMsg", formData);
-      setFormData({
-        name: "",
-        email: "",
-        message: "",
-        subject: ""
-      });
+      setFormData({ name: "", email: "", message: "", subject: "" });
       if (response.status === 200) {
         toast({
-          title: "✅ Message Sent!",
-          description: `${response.data.message || "We’ll get back to you soon."}`,
+          title: "Message Sent",
+          description: response.data.message || "We'll get back to you soon.",
         });
       }
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
-        title: "❌ Failed to send",
+        variant: "destructive",
+        title: "Submission Failed",
         description: "Please try again later.",
         action: <ToastAction altText="Try again">Retry</ToastAction>,
       });
     } finally {
-      setIsSending(false); // Stop loading
+      setIsSending(false);
     }
   };
 
-
   return (
-    <div className="w-[60vw] mx-auto rounded-xl border bg-background shadow-lg">
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "form" | "voice")}>
-        <TabsList className="grid grid-cols-2 rounded-t-lg rounded-b-none h-14">
-          <TabsTrigger
-            value="form"
-            className="data-[state=active]:bg-muted data-[state=active]:shadow-sm"
+    <div className="w-full max-w-md space-y-6">
+      <Tabs 
+        value={activeTab} 
+        onValueChange={(value) => setActiveTab(value as "form" | "voice")}
+        className="space-y-6"
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger 
+            value="form" 
+            className="data-[state=active]:bg-muted"
           >
-            📝 Text Message
+            Text Form
           </TabsTrigger>
-          <TabsTrigger
-            value="voice"
-            className="data-[state=active]:bg-muted data-[state=active]:shadow-sm"
+          <TabsTrigger 
+            value="voice" 
+            className="data-[state=active]:bg-muted"
           >
-            🎤 Voice Message
+            Voice Message
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="form" className="p-6">
+        <TabsContent value="form">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Name</label>
+            <div className="space-y-4">
               <Input
                 value={formData.name}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Your name"
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Name"
                 required
+                className="focus-visible:ring-1"
               />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
               <Input
                 type="email"
                 value={formData.email}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="your@email.com"
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                placeholder="Email"
                 required
+                className="focus-visible:ring-1"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Subject</label>
               <Input
-                type="text"
                 value={formData.subject}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, subject: e.target.value })}
-                placeholder="subject"
+                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                placeholder="Subject"
                 required
+                className="focus-visible:ring-1"
               />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Message</label>
               <Textarea
                 value={formData.message}
-                onChange={(e: { target: { value: any; }; }) => setFormData({ ...formData, message: e.target.value })}
-                placeholder="Type your message here..."
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                placeholder="Your message..."
                 rows={4}
                 required
+                className="resize-none focus-visible:ring-1"
               />
             </div>
 
-            <Button type="submit" className="w-full" disabled={isSending}>
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isSending}
+            >
               {isSending ? "Sending..." : "Send Message"}
             </Button>
           </form>
         </TabsContent>
 
-        <TabsContent value="voice" className="p-6">
-          <VoiceRecorderSection />
+        <TabsContent value="voice">
+          <div className="rounded-lg border bg-muted/50 p-6">
+            <VoiceRecorderSection />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

@@ -11,12 +11,43 @@ import { siteConfig } from "@/config/site"
 import { RouteChangeLoader } from "@/components/RouteChangerLoader"
 
 export const metadata: Metadata = {
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
+  title: 'Satyam Jha | Full-Stack Developer & Technical Architect',
+  description: 'Portfolio of Satyam Jha - Full-stack developer specializing in modern web applications, system design, and scalable solutions.',
+  keywords: [
+    'Full-stack Developer',
+    'Technical Architect',
+    'Web Development',
+    'System Design',
+    'React',
+    'Next.js',
+    'Node.js',
+    'TypeScript',
+  ],
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://yourdomain.com',
+    title: 'Satyam Jha | Full-Stack Developer',
+    description: 'Building scalable web solutions with modern technologies',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Satyam Jha Portfolio',
+      },
+    ],
   },
-  description: siteConfig.description,
-}
+  twitter: {
+    card: 'summary_large_image',
+    site: '@satyammjha',
+    creator: '@satyammjha',
+    title: 'Satyam Jha | Full-Stack Developer',
+    description: 'Portfolio showcasing technical projects and development expertise',
+    images: ['/twitter-og.jpg'],
+  },
+};
+
 
 export const viewport = {
   themeColor: [
@@ -36,7 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <RouteChangeLoader />
-          <Preloader /> 
+          <Preloader />
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">{children}</main>

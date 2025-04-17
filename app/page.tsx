@@ -4,7 +4,10 @@ import Hero from '@/components/Hero';
 import Skeleton from '../components/Skeleton';
 import { useEffect } from 'react';
 import { BlogGrid } from '@/components/BlogGrid';
-import { allBlogs } from '@/data/blogs';
+import { allBlogs } from '@/public/data/blogs';
+import LazyGitHubGarden from '@/components/Lazy/LazyGarden';
+// import { Metadata } from 'next';
+
 
 const AboutSection = dynamic(() => import('@/components/about-section'), {
   loading: () => <Skeleton className="h-[200px] w-full" />,
@@ -32,18 +35,44 @@ export default function IndexPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <main className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8 ">
-        <Hero />
-        <AboutSection />
-        <BlogGrid blogs={allBlogs.map(blog => ({
-        slug: blog.slug,
-        title: blog.title,
-        excerpt: blog.excerpt, 
-        date: blog.date,
-        image: blog.image
-      }))} />
-        <SkillsSection />
-        <LazyComponents />
+      <main className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Hero Section - Most Important */}
+        <section aria-label="Introduction">
+          <Hero />
+        </section>
+
+        {/* About Section - Core Identity */}
+        <section aria-label="About Me">
+          <AboutSection />
+        </section>
+
+        {/* Skills Section - Technical Expertise */}
+        <section aria-label="Technical Skills">
+          <SkillsSection />
+        </section>
+
+        {/* Blog Section - Thought Leadership */}
+        <section aria-label="Technical Blog">
+          <BlogGrid 
+            blogs={allBlogs.map(blog => ({
+              slug: blog.slug,
+              title: blog.title,
+              // excerpt: blog.email,
+              date: blog.date,
+              image: blog.image
+            }))} 
+          />
+        </section>
+
+        {/* GitHub Garden - Development Activity */}
+        <section aria-label="Code Contributions">
+          <LazyGitHubGarden />
+        </section>
+
+        {/* Projects/Contact - Secondary Content */}
+        <section aria-label="Additional Information">
+          <LazyComponents />
+        </section>
       </main>
     </div>
   );

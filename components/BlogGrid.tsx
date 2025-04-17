@@ -14,13 +14,13 @@ export function BlogGrid({ blogs }: { blogs: BlogCardProps[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {blogs.map((blog) => (
-        <Link 
+        <Link
           key={blog.slug}
           href={`/blog/${blog.slug}`}
           className="group block hover:no-underline"
         >
           <article className="h-full border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
- 
+
             <div className="relative aspect-video bg-muted/50">
               {blog.image ? (
                 <Image
@@ -37,10 +37,10 @@ export function BlogGrid({ blogs }: { blogs: BlogCardProps[] }) {
             </div>
 
             <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
+              <h3 className="text-lg text-black font-semibold mb-2 group-hover:text-primary transition-colors">
                 {blog.title}
               </h3>
-              
+
               {blog.excerpt && (
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {blog.excerpt}

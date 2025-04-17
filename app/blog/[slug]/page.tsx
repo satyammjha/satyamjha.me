@@ -1,5 +1,5 @@
 import BlogPage from '@/components/BlogPage'
-import { allBlogs } from '../../../data/blogs'
+import { allBlogs } from '../../../public/data/blogs'
 import { notFound } from 'next/navigation'
 
 interface Props {
