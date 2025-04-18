@@ -22,7 +22,8 @@ export default function LazyComponents() {
       <LazyVoiceRecorder />
       <TestimonialsSection />
       <ProjectsSection />
-      <ContactTabs />
+      <div className="center">  <ContactTabs /></div>
+
     </>
   );
 }

@@ -169,7 +169,7 @@ export default function VoiceRecorderSection() {
     };
 
     return (
-        <section className="flex items-center justify-center py-12 px-4 relative overflow-hidden">
+        <section className="flex items-center justify-center py-16 px-4 relative overflow-hidden">
 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 {[0, 1, 2].map((i) => (

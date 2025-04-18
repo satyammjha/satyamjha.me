@@ -66,44 +66,46 @@ export default function Hero() {
                             cleanCode();
                         </span>
                     </motion.p>
+                    <div className="flex sm:flex-col flex-row gap-4">
+                        <motion.div
+                            className="flex flex-col gap-3 sm:flex-row sm:gap-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.6 }}
+                        >
+                            <ResumeDownload />
+                        </motion.div>
 
-                    <motion.div
-                        className="flex flex-col gap-3 sm:flex-row sm:gap-4"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.6 }}
-                    >
-                        <ResumeDownload />
-                    </motion.div>
-
-                    <motion.div
-                        className="flex items-center gap-5 pt-6 md:pt-8"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.8 }}
-                    >
-                        {[
-                            { icon: Github, href: "https://github.com/satyammjha", color: "purple" },
-                            { icon: Linkedin, href: "https://linkedin.com/in/satyammjha", color: "teal" },
-                            { icon: Twitter, href: "https://x.com/satyammjha", color: "pink" },
-                            { icon: leetcode, href: "https://leetcode.com/satyammjha/", color: "blue" },
-                        ].map(({ icon: Icon, href, color }, index) => (
-                            <Link
-                                key={index}
-                                href={href}
-                                target="_blank"
-                                className={`group relative text-foreground/70 transition-all hover:text-${color}-400`}
-                                aria-label={`${Icon.displayName} profile`}
-                            >
-                                <div className={`absolute -inset-2 rounded-full bg-${color}-400/10 opacity-0 transition-opacity group-hover:opacity-100`} />
-                                <Icon className="h-6 w-6 transition-transform group-hover:scale-110 sm:h-7 sm:w-7" />
-                            </Link>
-                        ))}
-                    </motion.div>
+                        <motion.div
+                            className="flex items-center gap-5 pt-6 md:pt-8"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.8 }}
+                        >
+                            {[
+                                { icon: Github, href: "https://github.com/satyammjha", color: "purple" },
+                                { icon: Linkedin, href: "https://linkedin.com/in/satyammjha", color: "teal" },
+                                { icon: Twitter, href: "https://x.com/satyammjha", color: "pink" },
+                                { icon: leetcode, href: "https://leetcode.com/satyammjha/", color: "blue" },
+                            ].map(({ icon: Icon, href, color }, index) => (
+                                <Link
+                                    key={index}
+                                    href={href}
+                                    target="_blank"
+                                    className={`group relative text-foreground/70 transition-all hover:text-${color}-400`}
+                                    aria-label={`${Icon.displayName} profile`}
+                                >
+                                    <div className={`absolute -inset-2 rounded-full bg-${color}-400/10 opacity-0 transition-opacity group-hover:opacity-100`} />
+                                    <Icon className="h-6 w-6 transition-transform group-hover:scale-110 sm:h-7 sm:w-7" />
+                                </Link>
+                            ))}
+                        </motion.div>
+                    </div>
                 </motion.div>
-
-                <TerminalBackground />
             </div>
-        </section>
+
+            <TerminalBackground />
+
+        </section >
     )
 }

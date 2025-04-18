@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { BlogGrid } from '@/components/BlogGrid';
 import { allBlogs } from '@/public/data/blogs';
 import LazyGitHubGarden from '@/components/Lazy/LazyGarden';
+import Footer from '@/components/footer';
 // import { Metadata } from 'next';
 
 
@@ -36,42 +37,39 @@ export default function IndexPage() {
   return (
     <div className="min-h-screen bg-background">
       <main className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8 space-y-16">
-        {/* Hero Section - Most Important */}
         <section aria-label="Introduction">
           <Hero />
         </section>
 
-        {/* About Section - Core Identity */}
         <section aria-label="About Me">
           <AboutSection />
         </section>
 
-        {/* Skills Section - Technical Expertise */}
         <section aria-label="Technical Skills">
           <SkillsSection />
         </section>
 
-        {/* Blog Section - Thought Leadership */}
+        <section aria-label="Code Contributions">
+          <LazyGitHubGarden />
+        </section>
         <section aria-label="Technical Blog">
-          <BlogGrid 
+          <BlogGrid
             blogs={allBlogs.map(blog => ({
               slug: blog.slug,
               title: blog.title,
               // excerpt: blog.email,
               date: blog.date,
               image: blog.image
-            }))} 
+            }))}
           />
         </section>
 
-        {/* GitHub Garden - Development Activity */}
-        <section aria-label="Code Contributions">
-          <LazyGitHubGarden />
-        </section>
 
-        {/* Projects/Contact - Secondary Content */}
         <section aria-label="Additional Information">
           <LazyComponents />
+        </section>
+        <section aria-label="Additional Information">
+          <Footer />
         </section>
       </main>
     </div>

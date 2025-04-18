@@ -16,7 +16,7 @@ export default function LazyVoiceRecorder() {
 
     return (
         <div ref={ref}>
-            {inView ? <VoiceRecorderSection /> : <Skeleton height={150} />}
+            {inView ? <VoiceRecorderSection /> : <Skeleton height={250} />}
         </div>
     );
 }

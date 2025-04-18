@@ -47,7 +47,7 @@ export default function ContactTabs() {
   };
 
   return (
-    <div className="w-full max-w-md space-y-6">
+    <div className="w-full max-w-md space-y-6 self-center">
       <Tabs 
         value={activeTab} 
         onValueChange={(value) => setActiveTab(value as "form" | "voice")}
