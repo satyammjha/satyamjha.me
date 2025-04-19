@@ -96,7 +96,7 @@ export default function TestimonialsSection() {
                             }}
                             className="mx-auto px-6 py-10 rounded-xl bg-white/10 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-200/20 shadow-md max-w-lg"
                         >
-                            <div className="flex items-center justify-center mb-4">
+                            {/* <div className="flex items-center justify-center mb-4">
                                 <div className="relative h-14 w-14">
                                     {t.image ? (
                                         <Image
@@ -111,7 +111,7 @@ export default function TestimonialsSection() {
                                         </div>
                                     )}
                                 </div>
-                            </div>
+                            </div> */}
                             <h3 className="text-lg font-semibold">{t.name}</h3>
                             <p className="text-sm text-muted-foreground mb-4">{t.role}</p>
                             <p className="text-base text-foreground/90 italic">"{t.message}"</p>

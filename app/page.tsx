@@ -35,43 +35,41 @@ export default function IndexPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="mx-auto flex flex-col px-4 sm:px-6 lg:px-8 space-y-16">
-        <section aria-label="Introduction">
-          <Hero />
-        </section>
+    <>
+      <section aria-label="Introduction">
+        <Hero />
+      </section>
 
-        <section aria-label="About Me">
-          <AboutSection />
-        </section>
+      <section aria-label="About Me">
+        <AboutSection />
+      </section>
 
-        <section aria-label="Technical Skills">
-          <SkillsSection />
-        </section>
+      <section aria-label="Technical Skills">
+        <SkillsSection />
+      </section>
 
-        <section aria-label="Code Contributions">
-          <LazyGitHubGarden />
-        </section>
-        <section aria-label="Technical Blog">
-          <BlogGrid
-            blogs={allBlogs.map(blog => ({
-              slug: blog.slug,
-              title: blog.title,
-              // excerpt: blog.email,
-              date: blog.date,
-              image: blog.image
-            }))}
-          />
-        </section>
+      <section aria-label="Code Contributions">
+        <LazyGitHubGarden />
+      </section>
+      <section aria-label="Technical Blog">
+        <BlogGrid
+          blogs={allBlogs.map(blog => ({
+            slug: blog.slug,
+            title: blog.title,
+            // excerpt: blog.email,
+            date: blog.date,
+            image: blog.image
+          }))}
+        />
+      </section>
 
 
-        <section aria-label="Additional Information">
-          <LazyComponents />
-        </section>
-        <section aria-label="Additional Information">
-          <Footer />
-        </section>
-      </main>
-    </div>
+      <section aria-label="Additional Information">
+        <LazyComponents />
+      </section>
+      <section aria-label="Additional Information">
+        <Footer />
+      </section>
+    </>
   );
 }

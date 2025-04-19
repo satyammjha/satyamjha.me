@@ -1,60 +1,59 @@
-import "@/styles/globals.css"
-import { Metadata } from "next"
-import { SiteHeader } from "@/components/site-header"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "@/components/ui/toaster"
-import { Preloader } from "@/components/Preloader"
-import { cn } from "@/lib/utils"
-import { fontSans } from "@/lib/fonts"
-import { siteConfig } from "@/config/site"
-import { RouteChangeLoader } from "@/components/RouteChangerLoader"
-
+import "@/styles/globals.css";
+import { Metadata } from "next";
+import { SiteHeader } from "@/components/site-header";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
+import { fontSans } from "@/lib/fonts";
+import Background from "@/components/Background";
 export const metadata: Metadata = {
   title: 'Satyam Jha | Full-Stack Developer & Technical Architect',
-  description: 'Portfolio of Satyam Jha - Full-stack developer specializing in modern web applications, system design, and scalable solutions.',
+  description: 'Explore the portfolio of Satyam Jha, a full-stack developer and technical architect specializing in MERN stack, cloud infrastructure, scalable systems, and impactful digital experiences.',
   keywords: [
-    'Full-stack Developer',
+    'Satyam Jha',
+    'Full-Stack Developer',
     'Technical Architect',
-    'Web Development',
+    'MERN Stack',
+    'Web Developer Portfolio',
+    'React Developer',
+    'Node.js Developer',
+    'Cloud Developer',
     'System Design',
-    'React',
-    'Next.js',
-    'Node.js',
-    'TypeScript',
+    'Scalable Applications',
+    'Software Engineer',
+    'Portfolio Website',
   ],
+  authors: [{ name: 'Satyam Jha', url: 'https://satyamjha.me' }],
+  creator: 'Satyam Jha',
+  publisher: 'Satyam Jha',
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://yourdomain.com',
-    title: 'Satyam Jha | Full-Stack Developer',
-    description: 'Building scalable web solutions with modern technologies',
+    title: 'Satyam Jha | Full-Stack Developer & Technical Architect',
+    description:
+      'Hi, I’m Satyam Jha. I build fast, modern, and scalable web applications. Explore my portfolio, projects, and technical blog.',
+    url: 'https://satyamjha.me',
+    siteName: 'Satyam Jha Portfolio',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://satyamjha.me/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Satyam Jha Portfolio',
+        alt: 'Satyam Jha Portfolio Preview',
       },
     ],
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@satyammjha',
-    creator: '@satyammjha',
     title: 'Satyam Jha | Full-Stack Developer',
-    description: 'Portfolio showcasing technical projects and development expertise',
-    images: ['/twitter-og.jpg'],
+    description:
+      'Explore the work and projects of Satyam Jha — Full-stack developer crafting impactful, scalable web experiences.',
+    creator: '@yourtwitterhandle',
   },
+  metadataBase: new URL('https://satyamjha.me'),
 };
 
-
-export const viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
-}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -65,14 +64,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           fontSans.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <RouteChangeLoader />
-          <Preloader />
-          <div className="relative flex min-h-screen flex-col">
-            <SiteHeader />
-            <main className="flex-1">{children}</main>
-            <Toaster />
-          </div>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <SiteHeader />
+          <Background />
+          <main className="flex-1 md:px-6">
+            <div className="mx-auto max-w-7xl">
+              {children}
+            </div>
+          </main>
+          <Toaster />
           <TailwindIndicator />
         </ThemeProvider>
       </body>

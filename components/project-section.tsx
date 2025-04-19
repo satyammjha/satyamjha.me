@@ -2,7 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, Github } from "lucide-react";
+import { ArrowUpRight, Github, Package, MonitorCheck, Smartphone, Code2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -15,8 +15,8 @@ const projects = [
         description: "A plug-and-play Express.js middleware to monitor and log request performance with alerting system.",
         tech: ["Express.js", "TypeScript", "NPM", "Node.js"],
         image: "/expresseye.jpg",
-        repo: "https://github.com/satyammjha/expressEys",
-        liveLink: "https://www.npmjs.com/package/expresseys"
+        repo: "https://github.com/satyammjha/expressEye",
+        liveLink: "https://www.npmjs.com/package/expresseye"
     },
     {
         title: "SitePulse - Website Uptime Monitoring",
@@ -36,10 +36,15 @@ const projects = [
         title: "CU Auto Login - Chrome Extension",
         description: "A Chrome Extension that automates the login process for CUCHD’s Academics Manager portal, including auto-filling credentials and bypassing captcha using AI. Built to save time and make daily logins effortless.",
         tech: ["JavaScript", "Chrome Extension APIs", "Hugging Face", "AI Captcha Solver", "LocalStorage"],
-        image: "/cu-auto-login.jpg",
-        repo: "https://github.com/satyammjha/cu-auto-login-extension",
+        repo: "https://github.com/satyammjha/automa8",
     }
 ];
+
+const getProjectIcon = (projectIndex: number) => {
+    const icons = [Package, MonitorCheck, Smartphone, Code2];
+    const Icon = icons[projectIndex] || Code2;
+    return <Icon className="h-12 w-12 text-muted-foreground/40" />;
+};
 
 export default function ProjectsSection() {
     return (
@@ -71,14 +76,21 @@ export default function ProjectsSection() {
                         >
                             <Card className="h-full flex flex-col group overflow-hidden hover:shadow-lg transition-shadow relative">
                                 <div className="relative h-full overflow-hidden">
-                                    <Image
-                                        src={project.image}
-                                        alt={project.title}
-                                        fill
-                                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        priority={index === 0}
-                                    />
+                                    {project.image ? (
+                                        <Image
+                                            src={project.image}
+                                            alt={project.title}
+                                            fill
+                                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                            priority={index === 0}
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 bg-muted/50 flex items-center justify-center">
+                                            {getProjectIcon(index)}
+                                        </div>
+                                    )}
+
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
 
                                     <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">

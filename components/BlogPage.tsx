@@ -43,7 +43,7 @@ export default function BlogPage({
         <meta name="description" content={excerpt} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={excerpt} />
-        {image && <meta property="og:image" content={image} />}
+        {/* {image && <meta property="og:image" content={image} />} */}
         <meta name="author" content="Satyam Jha" />
       </Head>
 
@@ -61,7 +61,7 @@ export default function BlogPage({
               </h1>
             </div>
 
-            {image ? (
+            {/* {image ? (
               <div className="mb-6 md:mb-8 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 max-w-[800px] mx-auto">
                 <Image
                   src={image}
@@ -76,7 +76,7 @@ export default function BlogPage({
               <div className="mb-6 md:mb-8 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-muted/20 dark:bg-muted/30 aspect-video flex items-center justify-center max-w-[800px] mx-auto">
                 <span className="text-muted-foreground">No Image Available</span>
               </div>
-            )}
+            )} */}
 
             <div className="prose prose-invert max-w-none text-black dark:text-white text-lg leading-relaxed">
               {content.split('\n').map((line, i) => (

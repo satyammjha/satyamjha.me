@@ -93,7 +93,7 @@ export default function Hero() {
                                     href={href}
                                     target="_blank"
                                     className={`group relative text-foreground/70 transition-all hover:text-${color}-400`}
-                                    aria-label={`${Icon.displayName} profile`}
+                                    aria-label={`${href.replace(/https?:\/\/(www\.)?/, '').split('.')[0]} profile`}
                                 >
                                     <div className={`absolute -inset-2 rounded-full bg-${color}-400/10 opacity-0 transition-opacity group-hover:opacity-100`} />
                                     <Icon className="h-6 w-6 transition-transform group-hover:scale-110 sm:h-7 sm:w-7" />
