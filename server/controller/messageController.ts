@@ -26,9 +26,9 @@ export const sendMessage = async (req: Request, res: Response) => {
             subject: `New Message from ${email}`,
             html: `
             <body>
-            
+            ${name} sent you a message from your portfolio website.
+            <h2>Details</h2>
             <p>${message}</p>
-
             </body>
             `
         }
