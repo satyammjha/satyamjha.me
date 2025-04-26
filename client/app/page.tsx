@@ -5,7 +5,7 @@ import Skeleton from '../components/Skeleton';
 import { useEffect } from 'react';
 import { allBlogs } from '@/public/data/blogs';
 import LazyVoiceRecorder from '@/components/Lazy/LazyVoiceRecorder';
-import GitHubGardenWrapper from '@/components/Lazy/LazyGarden';
+import GitHubContributionGarden from '@/components/Garden';
 
 const AboutSection = dynamic(() => import('@/components/about-section'), {
   loading: () => <Skeleton className="h-[200px] w-full" />,
@@ -81,7 +81,7 @@ export default function IndexPage() {
 
       <section aria-label="Code Contributions" className="py-16 md:py-24 lg:py-32">
         <div className="container px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
-          <GitHubGardenWrapper />
+        <GitHubContributionGarden/>
         </div>
       </section>
 

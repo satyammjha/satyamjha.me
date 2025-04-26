@@ -7,7 +7,7 @@ const Background = () => {
   return (
     <div className="fixed inset-0 -z-50 overflow-hidden">
       {/* Grid pattern */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-repeat opacity-[0.03]" />
+      <div className="absolute inset-0 bg-repeat opacity-[0.03]" />
 
       {/* Animated gradients */}
       <motion.div

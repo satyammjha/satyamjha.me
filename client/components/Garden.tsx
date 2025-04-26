@@ -7,6 +7,10 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { parseISO, format, eachDayOfInterval, startOfWeek, endOfWeek, addDays } from "date-fns";
+import config from "@/config";
+
+const url = config.url
+console.log("API URL new:", url);
 
 type CommitEntry = {
     date: string;

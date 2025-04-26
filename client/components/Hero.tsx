@@ -9,10 +9,9 @@ import ResumeDownload from "./Resume"
 
 export default function Hero() {
     return (
-        <section className="relative flex min-h-screen items-center overflow-hidden px-4 sm:px-6 md:px-8">
+        <section className="relative flex min-h-screen items-center overflow-hidden px-4 sm:px-6 md:px-8 mt sm:mt-0">
             <div className="mx-auto w-full max-w-7xl">
                 <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-2 md:gap-8 lg:gap-12">
-
                     <motion.div
                         className="flex flex-col justify-center space-y-4 md:space-y-6 lg:space-y-8"
                         initial={{ opacity: 0, y: 20 }}

@@ -128,7 +128,7 @@ export default function InteractiveTerminal({ className }: InteractiveTerminalPr
   }, [phase, output])
 
   return (
-    <div className={cn("relative h-[60vh] w-full overflow-hidden rounded-lg bg-gray-900 shadow-2xl border border-gray-700") + (className ? ` ${className}` : '')}>
+    <div className={cn("relative h-[40vh] sm:h-[60vh] w-full overflow-hidden rounded-lg bg-gray-900 shadow-2xl border border-gray-700") + (className ? ` ${className}` : '')}>
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent mix-blend-overlay" />
         <div className="absolute inset-0 animate-scanline bg-gradient-to-b from-transparent via-white/5 to-transparent" />

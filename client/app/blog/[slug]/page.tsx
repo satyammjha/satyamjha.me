@@ -3,33 +3,32 @@ import { allBlogs } from '../../../public/data/blogs'
 import { notFound } from 'next/navigation'
 
 interface Props {
-    params: {
-        slug: string
-    }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-    return allBlogs.map((blog) => ({
-        slug: blog.slug
-    }))
+  return allBlogs.map((blog) => ({ slug: blog.slug }))
 }
 
-export default function BlogBySlug({ params }: Props) {
-    const decodedSlug = decodeURIComponent(params.slug)
-    const blog = allBlogs.find((b) => b.slug === decodedSlug)
+export default async function BlogBySlug({ params }: Props) {
+  // ① await the params promise
+  const { slug } = await params
 
-    if (!blog) return notFound()
+  // ② decode and find the blog
+  const decodedSlug = decodeURIComponent(slug)
+  const blog = allBlogs.find((b) => b.slug === decodedSlug)
+  if (!blog) return notFound()
 
-    const suggestedBlogs = allBlogs
-        .filter(b => b.slug !== decodedSlug)
-        .slice(0, 3)
-        .map(blog => ({
-            slug: blog.slug,
-            title: blog.title || 'NA',
-            date: blog.date || new Date().toISOString(),
-            category: blog.category || 'General',
-            image: blog.image || '/default-blog.jpg'
-        }))
+  const suggestedBlogs = allBlogs
+    .filter((b) => b.slug !== decodedSlug)
+    .slice(0, 3)
+    .map((b) => ({
+      slug: b.slug,
+      title: b.title || 'NA',
+      date: b.date || new Date().toISOString(),
+      category: b.category || 'General',
+      image: b.image || '/default-blog.jpg',
+    }))
 
-    return <BlogPage {...blog} suggestedBlogs={suggestedBlogs} />
+  return <BlogPage {...blog} suggestedBlogs={suggestedBlogs} />
 }
