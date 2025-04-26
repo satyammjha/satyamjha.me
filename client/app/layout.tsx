@@ -10,37 +10,39 @@ import Background from "@/components/Background";
 import { Preloader } from "@/components/Preloader";
 
 export const metadata: Metadata = {
-  title: 'Satyam Jha | Full-Stack Developer & Technical Architect',
-  description: 'Explore the portfolio of Satyam Jha, a full-stack developer and technical architect specializing in MERN stack, cloud infrastructure, scalable systems, and impactful digital experiences.',
+  title: 'Satyam Jha (satyammjha) | Full-Stack Developer & Technical Architect',
+  description: 'Discover Satyam Jha (satyammjha) — a full-stack developer and technical architect specializing in MERN stack, cloud engineering, scalable systems, and creating high-impact digital experiences.',
   keywords: [
     'Satyam Jha',
+    'satyammjha',
     'Full-Stack Developer',
     'Technical Architect',
-    'MERN Stack',
-    'Web Developer Portfolio',
+    'MERN Stack Developer',
+    'Cloud Developer',
     'React Developer',
     'Node.js Developer',
-    'Cloud Developer',
     'System Design',
+    'Web Developer Portfolio',
     'Scalable Applications',
     'Software Engineer',
     'Portfolio Website',
+    'Technical Blog',
+    'Open Source Developer',
   ],
-  authors: [{ name: 'Satyam Jha', url: 'https://satyamjha.me' }],
-  creator: 'Satyam Jha',
+  authors: [{ name: 'Satyam Jha (satyammjha)', url: 'https://satyamjha.me' }],
+  creator: 'Satyam Jha (satyammjha)',
   publisher: 'Satyam Jha',
   openGraph: {
-    title: 'Satyam Jha | Full-Stack Developer & Technical Architect',
-    description:
-      'Hi, I’m Satyam Jha. I build fast, modern, and scalable web applications. Explore my portfolio, projects, and technical blog.',
+    title: 'Satyam Jha (satyammjha) | Full-Stack Developer & Architect',
+    description: 'Hi, I’m Satyam Jha (satyammjha), building modern, fast, and scalable web applications. Explore my portfolio, technical blog, and projects across cloud and full-stack development.',
     url: 'https://satyamjha.me',
-    siteName: 'Satyam Jha Portfolio',
+    siteName: 'Satyam Jha | satyammjha Portfolio',
     images: [
       {
         url: 'https://satyamjha.me/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Satyam Jha Portfolio Preview',
+        alt: 'Satyam Jha | satyammjha Portfolio Preview',
       },
     ],
     locale: 'en_US',
@@ -48,9 +50,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Satyam Jha | Full-Stack Developer',
-    description:
-      'Explore the work and projects of Satyam Jha — Full-stack developer crafting impactful, scalable web experiences.',
+    title: 'Satyam Jha (satyammjha) | Full-Stack Developer & Architect',
+    description: 'Explore the projects and blogs by Satyam Jha (satyammjha) — building impactful and scalable digital products using MERN stack, cloud, and modern web technologies.',
     creator: '@satyammjha',
   },
   metadataBase: new URL('https://satyamjha.me'),
