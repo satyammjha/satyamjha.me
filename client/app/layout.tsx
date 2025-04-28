@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { fontSans } from "@/lib/fonts";
 import Background from "@/components/Background";
-import { Preloader } from "@/components/Preloader";
+// import { Preloader } from "@/components/Preloader";
 
 export const metadata: Metadata = {
   title: 'Satyam Jha (satyammjha) | Full-Stack Developer & Technical Architect',
@@ -70,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <SiteHeader />
           <Background />
-          <Preloader />
+          {/* <Preloader /> */}
           <main className="flex-1 md:px-6">
             <div className="mx-auto max-w-7xl">
               {children}

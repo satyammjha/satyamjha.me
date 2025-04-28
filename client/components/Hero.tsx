@@ -74,7 +74,7 @@ export default function Hero() {
                         </motion.p>
 
                         {/* CTAs */}
-                        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex gap-1 sm:flex-row sm:items-center">
                             <motion.div
                                 className="flex"
                                 initial={{ opacity: 0, y: 10 }}
@@ -85,7 +85,7 @@ export default function Hero() {
                             </motion.div>
 
                             <motion.div
-                                className="flex items-center gap-3 sm:gap-4"
+                                className="flex items-center gap-3 sm:gap-4 ml-2 sm:ml-4"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.9 }}
