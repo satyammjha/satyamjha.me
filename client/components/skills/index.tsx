@@ -16,47 +16,90 @@ export default function SkillsSection() {
   const skillsContainerRef = useRef<HTMLDivElement>(null);
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement }>({});
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const initialized = useRef(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const categories = Object.keys(skills) as Array<keyof typeof skills>;
 
   useEffect(() => {
-    if (!initialized.current) {
-      initialized.current = true;
-      return;
+    if (observerRef.current) {
+      observerRef.current.disconnect();
     }
 
     observerRef.current = new IntersectionObserver(
       (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const category = entry.target.getAttribute('data-category');
-            if (category && category !== activeCategory) {
-              setActiveCategory(category as keyof typeof skills);
-            }
+        if (autoScrollEnabled) return;
+
+        const visibleEntries = entries.filter(entry => entry.isIntersecting);
+        
+        if (visibleEntries.length > 0) {
+          const mostVisible = visibleEntries.reduce((prev, current) => 
+            current.intersectionRatio > prev.intersectionRatio ? current : prev
+          );
+          
+          const category = mostVisible.target.getAttribute('data-category');
+          if (category && category !== activeCategory) {
+            setActiveCategory(category as keyof typeof skills);
           }
-        });
+        }
       },
       {
         root: skillsContainerRef.current,
-        threshold: 0.5
+        rootMargin: '-10% 0px -10% 0px',
+        threshold: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
       }
     );
 
-    categories.forEach(category => {
-      const element = categoryRefs.current[category as string];
+    Object.keys(categoryRefs.current).forEach(category => {
+      const element = categoryRefs.current[category];
       if (element) observerRef.current?.observe(element);
     });
 
-    return () => observerRef.current?.disconnect();
-  }, [activeCategory]);
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [categories, autoScrollEnabled, activeCategory]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (autoScrollEnabled) {
+        setAutoScrollEnabled(false);
+      }
+
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+
+    const container = skillsContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [autoScrollEnabled]);
 
   const scrollToCategory = (category: keyof typeof skills) => {
     const element = categoryRefs.current[category];
     if (element && skillsContainerRef.current) {
       setAutoScrollEnabled(true);
-      element.scrollIntoView({ behavior: 'smooth' });
-      setTimeout(() => setAutoScrollEnabled(false), 500);
+      
+      setTimeout(() => {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setActiveCategory(category);
+        
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+        scrollTimeoutRef.current = setTimeout(() => {
+          setAutoScrollEnabled(false);
+        }, 1000);
+      }, 50);
     }
   };
 
@@ -70,15 +113,15 @@ export default function SkillsSection() {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [autoScrollEnabled, activeCategory]);
+  }, [autoScrollEnabled, activeCategory, categories]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         const nextIndex = (categories.indexOf(activeCategory) + 1) % categories.length;
         scrollToCategory(categories[nextIndex]);
       }
-      if (e.key === 'ArrowLeft') {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         const prevIndex = (categories.indexOf(activeCategory) - 1 + categories.length) % categories.length;
         scrollToCategory(categories[prevIndex]);
       }
@@ -86,7 +129,7 @@ export default function SkillsSection() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeCategory]);
+  }, [activeCategory, categories]);
 
   const handleSkillClick = (skill: string) => {
     setSelectedSkill(selectedSkill === skill ? null : skill);
@@ -94,7 +137,7 @@ export default function SkillsSection() {
 
   return (
     <section className="relative py-12 md:py-20 px-4 bg-transparent" id="skills">
-      <div className="mx-auto max-w-max">
+      <div className="mx-auto max-w-7xl">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -117,6 +160,7 @@ export default function SkillsSection() {
             activeCategory={activeCategory}
             handleSkillClick={handleSkillClick}
             selectedSkill={selectedSkill}
+            categories={categories}
           />
         </div>
 
@@ -145,7 +189,12 @@ type CategoryNavigationProps = {
 
 const CategoryNavigation = ({ categories, activeCategory, scrollToCategory, setAutoScrollEnabled }: CategoryNavigationProps) => (
   <div className="lg:col-span-4 lg:sticky lg:top-24 lg:h-[calc(100vh-12rem)] lg:mt-2">
-    <div className="flex flex-row lg:flex-col gap-2 md:gap-1.5 lg:gap-2 pb-3 lg:pb-0 overflow-x-auto lg:overflow-visible scrollbar-hide flex-nowrap">
+    <motion.div 
+      className="flex flex-row lg:flex-col gap-2 md:gap-1.5 lg:gap-2 pb-3 lg:pb-0 overflow-x-auto lg:overflow-visible scrollbar-hide flex-nowrap"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ staggerChildren: 0.05 }}
+    >
       {categories.map((category: keyof typeof skills) => {
         const Icon = categoryIcons[category];
         const isActive = category === activeCategory;
@@ -156,33 +205,43 @@ const CategoryNavigation = ({ categories, activeCategory, scrollToCategory, setA
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: categories.indexOf(category) * 0.05 }}
-            className="flex-shrink-0 lg:flex-shrink lg:w-full px-1 md:px-0.5 lg:px-0" // Added horizontal padding for mobile
+            className="flex-shrink-0 lg:flex-shrink lg:w-full px-1 md:px-0.5 lg:px-0"
           >
             <Button
               variant="ghost"
+              aria-label="Select Category"
               onClick={() => {
                 setAutoScrollEnabled(false);
                 scrollToCategory(category);
               }}
               className={cn(
-                "justify-start h-10 lg:h-12 px-3 sm:px-4 py-1.5 sm:py-2 w-full", // Adjusted padding for different screens
-                "text-sm md:text-base lg:text-sm", // Responsive text sizing
-                isActive && `bg-gradient-to-r ${categoryGradients[category]} text-white`,
-                "hover:bg-muted/50" // Added hover state
+                "justify-start h-10 md:h-11 lg:h-12 px-3 sm:px-4 py-1.5 sm:py-2 w-full",
+                "text-sm md:text-base lg:text-sm font-medium",
+                "transition-all duration-300 ease-in-out",
+                isActive 
+                  ? `bg-gradient-to-r ${categoryGradients[category]} text-white shadow-md`
+                  : "hover:bg-muted/50 text-foreground/80"
               )}
             >
-              <Icon className="w-5 h-5 mr-2 lg:mr-3" /> {/* Increased icon spacing */}
-              <span className="text-left truncate max-w-[120px] md:max-w-full"> {/* Added max-width for mobile */}
-                {category.replace(/([A-Z])/g, " $1").trim()}
+              <Icon className={cn(
+                "w-4 h-4 sm:w-5 sm:h-5 mr-2 lg:mr-3",
+                isActive ? "text-white" : "text-muted-foreground"
+              )} />
+              <span className="text-left truncate max-w-[120px] sm:max-w-[140px] md:max-w-full capitalize">
+                {category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, " $1").trim()}
               </span>
-              <span className="ml-auto text-muted-foreground/80 md:block hidden"> {/* Show count on tablet+ */}
+              <span className={cn(
+                "ml-auto",
+                isActive ? "text-white/90" : "text-muted-foreground/70",
+                "hidden sm:block text-xs md:text-sm"
+              )}>
                 {skills[category].length}
               </span>
             </Button>
           </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   </div>
 );
 
@@ -192,64 +251,78 @@ const SkillsPanel = ({
   activeCategory,
   handleSkillClick,
   selectedSkill,
+  categories,
 }: {
   skillsContainerRef: React.RefObject<HTMLDivElement>;
   categoryRefs: React.MutableRefObject<{ [key: string]: HTMLDivElement }>;
   activeCategory: keyof typeof skills;
   handleSkillClick: (skill: string) => void;
   selectedSkill: string | null;
+  categories: Array<keyof typeof skills>;
 }) => (
   <div
     ref={skillsContainerRef}
-    className="lg:col-span-8  h-[50vh] lg:h-[calc(100vh-12rem)] overflow-y-auto snap-y snap-mandatory scrollbar-hide"
+    className="lg:col-span-8 h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-12rem)] overflow-y-auto snap-y snap-mandatory scrollbar-hide rounded-lg"
+    style={{ scrollSnapType: 'y mandatory' }}
   >
-    {Object.entries(skills).map(([category, items]) => (
-      <div
-        key={category}
-        ref={(el) => {
-          if (el) {
-            categoryRefs.current[category] = el;
-          }
-        }}
-        data-category={category}
-        className="h-[80vh] lg:h-[calc(100vh-12rem)] snap-always snap-start flex items-center"
-      >
-        <div className="w-full p-6 rounded-xl bg-muted/10 border backdrop-blur-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-lg ${categoryColors[category as keyof typeof categoryColors]} flex items-center justify-center`}>
-              {React.createElement(categoryIcons[category as keyof typeof categoryIcons], { className: "w-4 h-4 text-white" })}
+    <AnimatePresence>
+      {categories.map((category) => (
+        <motion.div
+          key={category}
+          ref={(el) => {
+            if (el) {
+              categoryRefs.current[category] = el;
+            }
+          }}
+          data-category={category}
+          className="min-h-[50vh] sm:min-h-[60vh] lg:min-h-[calc(100vh-12rem)] snap-always snap-start py-6 px-3 md:px-6"
+          initial={{ opacity: 0.4 }}
+          animate={{
+            opacity: category === activeCategory ? 1 : 0.4,
+            scale: category === activeCategory ? 1 : 0.98,
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className="w-full p-4 sm:p-6 rounded-xl bg-muted/10 border backdrop-blur-sm h-full flex flex-col">
+            <div className="mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+              <div className={`w-8 h-8 rounded-lg ${categoryColors[category]} flex items-center justify-center shrink-0`}>
+                {React.createElement(categoryIcons[category], { className: "w-4 h-4 text-white" })}
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold capitalize">
+                {category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1').trim()}
+              </h3>
+              <span className="ml-auto text-sm text-muted-foreground lg:hidden">
+                {skills[category].length} skills
+              </span>
             </div>
-            <h3 className="text-lg font-semibold">
-              {category.replace(/([A-Z])/g, ' $1').trim()}
-            </h3>
-          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 justify-items-center">
-            {items.map((skill, index) => (
-              <motion.div
-                key={skill}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.05 }}
-                className="w-full max-w-[200px] relative"
-                onClick={() => handleSkillClick(skill)}
-              >
-                <div className={cn(
-                  "p-3 rounded-lg text-sm cursor-pointer transition-all text-center relative",
-                  "bg-background border hover:border-primary/50",
-                  selectedSkill === skill && `${categoryColors[category as keyof typeof categoryColors]} text-white`
-                )}>
-                  {skill}
-                  {skillDescriptions[skill] && (
-                    <Info className="absolute bottom-1 right-1 w-3 h-3 text-muted-foreground" />
-                  )}
-                </div>
-              </motion.div>
-            ))}
+            <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 justify-items-center flex-grow">
+              {skills[category].map((skill, index) => (
+                <motion.div
+                  key={skill}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="w-full relative"
+                  onClick={() => handleSkillClick(skill)}
+                >
+                  <div className={cn(
+                    "p-2 sm:p-3 rounded-lg text-xs sm:text-sm cursor-pointer transition-all text-center relative",
+                    "bg-background border hover:border-primary/50 hover:shadow-sm",
+                    selectedSkill === skill && `${categoryColors[category]} text-white shadow-md`
+                  )}>
+                    {skill}
+                    {skillDescriptions[skill] && (
+                      <Info className="absolute bottom-1 right-1 w-3 h-3 text-muted-foreground" />
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
-    ))}
+        </motion.div>
+      ))}
+    </AnimatePresence>
   </div>
 );
 
@@ -270,8 +343,9 @@ const ProgressIndicator = ({ categories, activeCategory, scrollToCategory }: Pro
             "h-1.5 rounded-full transition-all duration-300",
             category === activeCategory
               ? `w-6 ${categoryColors[category]}`
-              : "w-1.5 bg-muted-foreground/30"
+              : "w-1.5 bg-muted-foreground/30 hover:bg-muted-foreground/50"
           )}
+          aria-label={`Go to ${category} category`}
         />
       ))}
     </div>

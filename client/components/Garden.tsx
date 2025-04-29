@@ -235,6 +235,7 @@ const GitHubContributionGarden = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm font-medium text-primary hover:underline"
+                     aria-label="View expressEye on GitHub"
                 >
                     View GitHub Profile →
                 </a>

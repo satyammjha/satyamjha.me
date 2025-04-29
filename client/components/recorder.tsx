@@ -284,6 +284,7 @@ export default function VoiceRecorderSection() {
                                     <>
                                         <Button
                                             variant="outline"
+                                            aria-label="Reset"
                                             onClick={handleReset}
                                             className="rounded-full h-10 px-4 border-muted-foreground/20"
                                         >
@@ -292,6 +293,7 @@ export default function VoiceRecorderSection() {
                                         </Button>
                                         <Button
                                             onClick={handleSend}
+                                            aria-label="Send"
                                             className="rounded-full h-10 px-4 bg-primary text-primary-foreground hover:bg-primary/90"
                                         >
                                             <Send className="w-4 h-4 mr-2" />
@@ -307,6 +309,7 @@ export default function VoiceRecorderSection() {
                                                 ? "bg-red-500 text-white hover:bg-red-600 animate-pulse"
                                                 : "bg-primary text-primary-foreground hover:bg-primary/90"
                                         )}
+                                        aria-label={status === "recording" ? "Stop Recording" : "Start Recording"}
                                     >
                                         {status === "recording" ? (
                                             <span className="w-3 h-3 rounded bg-white animate-pulse" />

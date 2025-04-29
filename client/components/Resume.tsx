@@ -18,7 +18,7 @@ export default function ResumeDownload() {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="default" className="gap-2 group">
+                <Button variant="default" className="gap-2 group" aria-label="view resume">
                     <DownloadIcon className="w-4 h-4 transition-transform group-hover:scale-110" />
                     View Resume
                 </Button>
@@ -44,7 +44,7 @@ export default function ResumeDownload() {
                                 <p className="text-muted-foreground mb-4">
                                     Unable to view PDF? 
                                 </p>
-                                <Button asChild variant="secondary">
+                                <Button asChild variant="secondary" aria-label="Open PDF in new tab">
                                     <a
                                         href="https://drive.google.com/file/d/1E9AypFF2uHAceX-DINpMs4u3tKAFKUp1/view?usp=sharing"
                                         target="_blank"
@@ -66,12 +66,13 @@ export default function ResumeDownload() {
                         <div className="flex gap-4 w-full sm:w-auto">
                             <Button
                                 variant="secondary"
+                                aria-label='Close Resume Dialog'
                                 onClick={() => setIsOpen(false)}
                                 className="w-full sm:w-auto"
                             >
                                 Close
                             </Button>
-                            <Button asChild className="w-full sm:w-auto">
+                            <Button asChild className="w-full sm:w-auto" aria-label="download pdf">
                                 <a
                                     href="/data/satyam.pdf"
                                     download="Satyam_Resume.pdf"

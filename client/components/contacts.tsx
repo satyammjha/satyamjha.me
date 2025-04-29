@@ -170,6 +170,7 @@ export default function ContactTabs() {
               type="submit" 
               className="w-full" 
               disabled={isSending}
+              aria-label="Send Message"
             >
               {isSending ? (
                 <>

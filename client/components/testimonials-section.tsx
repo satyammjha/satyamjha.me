@@ -8,11 +8,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 
 export const testimonials = [
   {
@@ -85,6 +81,7 @@ export default function TestimonialCarousel() {
                               href={testimonial.site}
                               target="_blank"
                               rel="noopener noreferrer"
+                              aria-label="Visit website"
                               className="inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary/80 transition-colors"
                             >
                               {testimonial.site.includes('linkedin') ? (

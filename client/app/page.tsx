@@ -2,7 +2,6 @@
 import dynamic from 'next/dynamic';
 import Hero from '@/components/Hero';
 import Skeleton from '../components/Skeleton';
-import { useEffect } from 'react';
 import { allBlogs } from '@/public/data/blogs';
 import LazyVoiceRecorder from '@/components/Lazy/LazyVoiceRecorder';
 import GitHubContributionGarden from '@/components/Garden';
@@ -43,22 +42,6 @@ const Footer = dynamic(() => import('@/components/footer'), {
 });
 
 export default function IndexPage() {
-  useEffect(() => {
-    const preload = async () => {
-      const { preload } = await import('@/lib/preload');
-      preload([
-        '/components/about-section',
-        '/components/skills/index',
-        '/components/BlogGrid',
-        '/components/testimonials-section',
-        '/components/project-section',
-        '/components/contacts',
-        '/components/footer'
-      ]);
-    };
-    window.requestIdleCallback(preload);
-  }, []);
-
   return (
     <main className="space-y-20 md:space-y-32 lg:space-y-40">
       <section aria-label="Introduction">
@@ -81,7 +64,7 @@ export default function IndexPage() {
 
       <section aria-label="Code Contributions" className="py-16 md:py-24 lg:py-32">
         <div className="container px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">
-        <GitHubContributionGarden/>
+          <GitHubContributionGarden />
         </div>
       </section>
 
@@ -92,8 +75,7 @@ export default function IndexPage() {
             title: blog.title,
             date: blog.date,
             image: blog.image
-          }))}
-          />
+          }))} />
         </div>
       </section>
 

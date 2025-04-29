@@ -120,6 +120,7 @@ export default function ProjectsSection() {
                                             <Button
                                                 asChild
                                                 variant="ghost"
+                                                aria-label="GitHub Repository"
                                                 size="sm"
                                                 className="rounded-full backdrop-blur-md bg-black/40 hover:bg-black/60 text-white h-8 w-8 p-0"
                                             >
@@ -131,6 +132,7 @@ export default function ProjectsSection() {
                                         {project.liveLink && (
                                             <Button
                                                 asChild
+                                                aria-label="Live Demo"
                                                 size="sm"
                                                 className="rounded-full backdrop-blur-md bg-black/40 hover:bg-black/60 text-white h-8 w-8 p-0"
                                             >
