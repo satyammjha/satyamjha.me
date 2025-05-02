@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { parseISO, format, eachDayOfInterval, startOfWeek, endOfWeek, addDays } from "date-fns";
 import config from "@/config";
+import axios from 'axios';
 
 const url = config.url
 console.log("API URL new:", url);
@@ -64,8 +65,8 @@ const GitHubContributionGarden = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:5000/commits");
-                const rawData: CommitEntry[] = await res.json();
+                const res = await axios.get("http://ec2-43-205-226-105.ap-south-1.compute.amazonaws.com:5000/commits");
+                const rawData: CommitEntry[] = res.data;
 
                 if (!rawData || rawData.length === 0) {
                     console.error("No commit data returned");
@@ -235,7 +236,7 @@ const GitHubContributionGarden = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm font-medium text-primary hover:underline"
-                     aria-label="View expressEye on GitHub"
+                    aria-label="View expressEye on GitHub"
                 >
                     View GitHub Profile →
                 </a>

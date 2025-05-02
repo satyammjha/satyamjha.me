@@ -7,9 +7,10 @@ import messageRouter from "./routes/messageRoute"
 const app = express();
 
 
-app.get('/get', (req: Request, res: Response) => {
+app.get('/health', (req: Request, res: Response) => {
     res.status(200).send("Hello World");
-})
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.json());

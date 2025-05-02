@@ -90,7 +90,7 @@ export default function ContactTabs() {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:5000/sendMsg", formData);
+      const response = await axios.post("http://ec2-43-205-226-105.ap-south-1.compute.amazonaws.com:5000/sendMsg", formData);
       setFormData({ name: "", email: "", message: "", subject: "" });
       toast({
         title: "Message Sent",
