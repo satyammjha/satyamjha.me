@@ -65,7 +65,7 @@ const GitHubContributionGarden = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get("http://ec2-43-205-226-105.ap-south-1.compute.amazonaws.com:5000/commits");
+                const res = await axios.get("https://api.satyamjha.me/commits");
                 const rawData: CommitEntry[] = res.data;
 
                 if (!rawData || rawData.length === 0) {

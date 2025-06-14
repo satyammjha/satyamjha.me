@@ -94,7 +94,7 @@ export default function Hero() {
                                     { icon: Github, href: "https://github.com/satyammjha", color: "purple", label: "GitHub" },
                                     { icon: Linkedin, href: "https://linkedin.com/in/satyammjha", color: "teal", label: "LinkedIn" },
                                     { icon: Twitter, href: "https://x.com/satyammjha", color: "pink", label: "Twitter" },
-                                    { icon: leetcode, href: "https://leetcode.com/satyammjha/", color: "blue", label: "LeetCode" },
+                                    // { icon: leetcode, href: "https://leetcode.com/satyammjha/", color: "blue", label: "LeetCode" },
                                 ].map(({ icon: Icon, href, color, label }, index) => (
                                     <Link
                                         key={index}

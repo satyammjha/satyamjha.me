@@ -90,7 +90,7 @@ export default function ContactTabs() {
       return;
     }
     try {
-      const response = await axios.post("http://ec2-43-205-226-105.ap-south-1.compute.amazonaws.com:5000/sendMsg", formData);
+      const response = await axios.post("https://api.satyamjha.me/sendMsg", formData);
       setFormData({ name: "", email: "", message: "", subject: "" });
       toast({
         title: "Message Sent",
@@ -111,20 +111,20 @@ export default function ContactTabs() {
 
   return (
     <div className="w-full max-w-full space-y-4">
-      <Tabs 
-        value={activeTab} 
+      <Tabs
+        value={activeTab}
         onValueChange={(value) => setActiveTab(value as "form" | "voice")}
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-2 h-12 bg-background">
-          <TabsTrigger 
-            value="form" 
+          <TabsTrigger
+            value="form"
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             Text Form
           </TabsTrigger>
-          <TabsTrigger 
-            value="voice" 
+          <TabsTrigger
+            value="voice"
             className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           >
             Voice Message
@@ -166,9 +166,9 @@ export default function ContactTabs() {
               />
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full" 
+            <Button
+              type="submit"
+              className="w-full"
               disabled={isSending}
               aria-label="Send Message"
             >

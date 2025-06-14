@@ -55,6 +55,10 @@ export default function IndexPage() {
           <AboutSection />
         </div>
       </section>
+      
+      <div className="container px-4 sm:px-6 md:px-8 max-w-3xl mx-auto">
+        <LazyVoiceRecorder />
+      </div>
 
       <section aria-label="Technical Skills" className="py-16 md:py-24 lg:py-32 bg-muted/10">
         <div className="container px-4 sm:px-6 md:px-8 max-w-6xl mx-auto">
@@ -79,9 +83,6 @@ export default function IndexPage() {
         </div>
       </section>
 
-      <div className="container px-4 sm:px-6 md:px-8 max-w-3xl mx-auto">
-        <LazyVoiceRecorder />
-      </div>
 
       <section aria-label="Client Testimonials" className="py-16 md:py-24 lg:py-32 bg-muted/10">
         <div className="container px-4 sm:px-6 md:px-8 max-w-7xl mx-auto">

@@ -131,7 +131,7 @@ export default function VoiceRecorderSection() {
             formData.append("email", email);
             formData.append("audio", file);
 
-            await axios.post("http://ec2-43-205-226-105.ap-south-1.compute.amazonaws.com:5000/sendNote", formData);
+            await axios.post("https://api.satyamjha.me/sendNote", formData);
             setIsSending(false);
             setIsModalOpen(false);
             toast({
